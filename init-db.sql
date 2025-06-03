@@ -57,7 +57,7 @@ CREATE TABLE Utilisateur
     nomUtilisateur    VARCHAR(50) NOT NULL,
     prenomUtilisateur VARCHAR(50) NOT NULL,
     login             VARCHAR(50) NOT NULL,
-    mdp               VARCHAR(50) NULL,
+    mdp               VARCHAR(256) NULL,
     hashcode          VARCHAR(128) NULL,
     dateHeureCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dateHeureMAJ      TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
