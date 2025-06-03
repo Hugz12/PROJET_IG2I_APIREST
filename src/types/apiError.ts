@@ -9,3 +9,13 @@ export class ApiError extends Error {
         Error.captureStackTrace(this, this.constructor);
     }
 }
+
+export class BodyError extends ApiError {
+    fieldErrors: any[];
+    constructor({ message, statusCode, internalCode, fieldErrors }: { message: string; statusCode: number; internalCode: string; fieldErrors: any[] }) {
+        super({ message, statusCode, internalCode });
+        this.fieldErrors = fieldErrors;
+        this.name = this.constructor.name;
+        Error.captureStackTrace(this, this.constructor);
+    }
+}
