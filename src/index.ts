@@ -1,4 +1,5 @@
 import express from 'express';
+import dotenv from 'dotenv';
 
 // Routes import
 
@@ -8,8 +9,8 @@ import express from 'express';
 const app = express();
 const port = 3000;
 
-
-
+// Start environment
+dotenv.config();
 
 // Start server
 try {
