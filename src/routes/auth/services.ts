@@ -1,8 +1,7 @@
 import { getConnection } from "lib/services/mysql";
 import { ApiError } from "types/apiError";
 import { ErrorResponses } from "types/errorResponses";
-import { SuccessResponses } from "types/successResponses";
-import { generateToken, verifyToken } from "lib/services/jwt";
+import { generateToken } from "lib/services/jwt";
 import { hashPassword, verifyPassword } from "lib/utils/crypt";
 import { LoginDTO, RegisterDTO } from "routes/auth/schema";
 
@@ -27,7 +26,7 @@ export async function serviceRegister(register: RegisterDTO): Promise<boolean> {
     );
 
     // Close the connection
-    await connection.release();
+    connection.release();
  
     return true;
 }
@@ -42,7 +41,6 @@ export async function serviceLogin(login: LoginDTO): Promise<{ token: string }> 
         throw new ApiError(ErrorResponses.INVALID_CREDENTIALS);
     }
     const user = rows[0];
-    console.log("User found:", user);
 
     // Verify the password
     const isPasswordValid = await verifyPassword(login.mdp, user.mdp);
@@ -53,7 +51,7 @@ export async function serviceLogin(login: LoginDTO): Promise<{ token: string }> 
     const token = generateToken({ idUtilisateur: user.idUtilisateur, login: user.login });
 
     // Close the connection
-    await connection.release();
+    connection.release();
 
     return { token };
 }

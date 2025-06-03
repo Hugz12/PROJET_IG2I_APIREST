@@ -10,7 +10,6 @@ export interface TokenPayload extends JwtPayload {
 }
 
 export function generateToken(payload: object): string {
-    console.log(JWT_SECRET);
     return jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 }
 

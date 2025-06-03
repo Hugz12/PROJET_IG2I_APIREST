@@ -1,37 +1,47 @@
-import { Router, Request, Response } from "express";
-import { checkRequestBody } from "lib/services/checkRequestBody";
+import { Router, Request, Response, NextFunction } from "express";
+import { bodyControl } from "lib/services/bodyControl";
 import { SuccessResponses } from "types/successResponses";
 import { LoginDTO, RegisterDTO } from "routes/auth/schema";
-import { handleServiceCall } from "lib/services/handleServiceCall";
 import { serviceLogin, serviceRegister } from "./services";
 
 const router: Router = Router();
 
-router.post("/register", async (req: Request, res: Response) => {
+router.post("/register", async (req: Request, res: Response, next: NextFunction) => {
      // Body control
-    const controlledBody: RegisterDTO | null = await checkRequestBody(RegisterDTO, req, res);
-    if (!controlledBody) return;
+    const controlledBody: RegisterDTO = await bodyControl(RegisterDTO, req.body);
 
     // Call service to handle registration
-    handleServiceCall(
-        res,
-        () => serviceRegister(controlledBody),
-        SuccessResponses.USER_REGISTERED,
-    );
+    try {
+        const result = serviceRegister(controlledBody);
+        res.status(SuccessResponses.USER_REGISTERED.statusCode).json({
+            data: {
+                internalCode: SuccessResponses.USER_REGISTERED.internalCode,
+                message: SuccessResponses.USER_REGISTERED.message,
+                user: result,
+            },
+        });
+    } catch (error) {
+        next(error);
+    }
 });
 
-router.post("/login", async (req: Request, res: Response) => {
+router.post("/login", async (req: Request, res: Response, next: NextFunction) => {
     // Body control
-    const controlledBody: LoginDTO | null = await checkRequestBody(LoginDTO, req, res);
-    if (!controlledBody) return;
+    const controlledBody: LoginDTO = await bodyControl(LoginDTO, req.body);
 
     // Call service to handle login
-    handleServiceCall(
-        res,
-        () => serviceLogin(controlledBody),
-        SuccessResponses.USER_LOGGED_IN,
-        ({ token }) => ({ token })
-    );
+    try {
+        const result = await serviceLogin(controlledBody);
+        res.status(SuccessResponses.USER_LOGGED_IN.statusCode).json({
+            data: {
+                internalCode: SuccessResponses.USER_LOGGED_IN.internalCode,
+                message: SuccessResponses.USER_LOGGED_IN.message,
+                user: result,
+            },
+        });
+    } catch (error) {
+        next(error);
+    }
 });
 
 export default router;

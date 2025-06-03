@@ -6,6 +6,7 @@ import authRoutes from './routes/auth/controller'; // Uncomment when auth routes
 // Middlewares import
 import { jsonErrorHandler } from './middlewares/JSONErrors';
 import { notFoundHandler } from './middlewares/notFound';
+import { errorHandler } from './middlewares/errors';
 
 // Server setup
 const app = express();
@@ -20,9 +21,11 @@ try {
 
     // Setup routes
     app.use('/auth', authRoutes); // Uncomment when auth routes are implemented
-
-    // Handle 404 Not Found
     app.use(notFoundHandler);
+
+    app.use(errorHandler);
+    
+    
     
     // Start the server
     app.listen(port, () => {
