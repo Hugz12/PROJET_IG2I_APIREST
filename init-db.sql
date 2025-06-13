@@ -73,8 +73,8 @@ CREATE TABLE Compte
     idUtilisateur     INT NOT NULL,
     dateHeureCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dateHeureMAJ      TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
-    soldeInitial      DECIMAL(6, 2) DEFAULT 0.00 NOT NULL,
-    dernierSolde      DECIMAL(6, 2) DEFAULT 0.00 NOT NULL,
+    soldeInitial      DECIMAL(8, 2) DEFAULT 0.00 NOT NULL,
+    dernierSolde      DECIMAL(8, 2) DEFAULT 0.00 NOT NULL,
     CONSTRAINT Compte_Utilisateur_idUtilisateur_fk
         FOREIGN KEY (idUtilisateur) REFERENCES Utilisateur (idUtilisateur)
             ON DELETE CASCADE
@@ -126,7 +126,7 @@ CREATE TABLE Virement
     idVirement        INT AUTO_INCREMENT PRIMARY KEY,
     idCompteDebit     INT NOT NULL,
     idCompteCredit    INT NOT NULL,
-    montant           DECIMAL(6, 2) DEFAULT 0.00 NOT NULL,
+    montant           DECIMAL(8, 2) DEFAULT 0.00 NOT NULL,
     dateVirement      DATE DEFAULT (CURDATE()) NOT NULL,
     dateHeureCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dateHeureMAJ      TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -147,7 +147,7 @@ CREATE TABLE Mouvement
     idCategorie       INT DEFAULT 1 NULL,
     idSousCategorie   INT NULL,
     idVirement        INT NULL,
-    montant           DECIMAL(6, 2) NULL,
+    montant           DECIMAL(8, 2) NULL,
     typeMouvement     CHAR(1) DEFAULT 'D' NULL,
     dateHeureCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dateHeureMAJ      TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP,
