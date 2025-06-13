@@ -251,7 +251,7 @@ CREATE TRIGGER TRG_AFTER_INSERT_MOUVEMENT
     ON Mouvement
     FOR EACH ROW
 BEGIN
-    DECLARE v_solde DECIMAL(6, 2);
+    DECLARE v_solde DECIMAL(8, 2);
     
     /* Mettre à jour le solde du compte concerné */
     SELECT dernierSolde INTO v_solde FROM Compte WHERE idCompte = NEW.idCompte;
@@ -272,7 +272,7 @@ CREATE TRIGGER TRG_AFTER_UPDATE_MOUVEMENT
     ON Mouvement
     FOR EACH ROW
 BEGIN
-    DECLARE v_solde DECIMAL(6, 2);
+    DECLARE v_solde DECIMAL(8, 2);
     
     /* Mettre à jour le solde du compte concerné */
     SELECT dernierSolde INTO v_solde FROM Compte WHERE idCompte = NEW.idCompte;
@@ -298,7 +298,7 @@ CREATE TRIGGER TRG_AFTER_DELETE_MOUVEMENT
     ON Mouvement
     FOR EACH ROW
 BEGIN
-    DECLARE v_solde DECIMAL(6, 2);
+    DECLARE v_solde DECIMAL(8, 2);
     
     /* Mettre à jour le solde du compte concerné */
     SELECT dernierSolde INTO v_solde FROM Compte WHERE idCompte = OLD.idCompte;
