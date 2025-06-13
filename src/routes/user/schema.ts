@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength, IsNumber } from 'class-validator';
-import { IsValidPostalCode } from '../common/validators';
+import { IsValidPostalCode } from '../../lib/utils/validators';
 
 export class UpdateUserDTO {
     @IsString() @IsNotEmpty() @MaxLength(50)

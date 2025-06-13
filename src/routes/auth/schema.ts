@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsNumber, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsValidPostalCode } from '../../lib/utils/validators';
 
 export class RegisterDTO {
     @IsEmail() @IsNotEmpty()
@@ -16,7 +17,7 @@ export class RegisterDTO {
     @IsString() @IsNotEmpty() @MaxLength(128)
     ville: string;
 
-    @IsNumber() @IsNotEmpty()
+    @IsNumber() @IsNotEmpty() @IsValidPostalCode()
     codePostal: number;
 
 
@@ -40,5 +41,77 @@ export class LoginDTO {
     constructor(login: string, mdp: string) {
         this.login = login;
         this.mdp = mdp;
+    }
+}
+
+export class LoginResponseDTO {
+    token: string;
+    user: {
+        idUtilisateur: number;
+        nomUtilisateur: string;
+        prenomUtilisateur: string;
+        login: string;
+        ville?: string;
+        codePostal?: string;
+    };
+
+    constructor(
+        token: string,
+        idUtilisateur: number,
+        nomUtilisateur: string,
+        prenomUtilisateur: string,
+        login: string,
+        ville?: string,
+        codePostal?: string
+    ) {
+        this.token = token;
+        this.user = {
+            idUtilisateur,
+            nomUtilisateur,
+            prenomUtilisateur,
+            login,
+            ville,
+            codePostal
+        };
+    }
+}
+
+export class RegisterResponseDTO {
+    message: string;
+    user: {
+        idUtilisateur: number;
+        nomUtilisateur: string;
+        prenomUtilisateur: string;
+        login: string;
+        ville?: string;
+        codePostal?: string;
+    };
+
+    constructor(
+        message: string,
+        idUtilisateur: number,
+        nomUtilisateur: string,
+        prenomUtilisateur: string,
+        login: string,
+        ville?: string,
+        codePostal?: string
+    ) {
+        this.message = message;
+        this.user = {
+            idUtilisateur,
+            nomUtilisateur,
+            prenomUtilisateur,
+            login,
+            ville,
+            codePostal
+        };
+    }
+}
+
+export class LogoutResponseDTO {
+    message: string;
+
+    constructor(message: string) {
+        this.message = message;
     }
 }
