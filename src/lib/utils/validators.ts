@@ -40,21 +40,6 @@ export class IsValidPostalCodeConstraint implements ValidatorConstraintInterface
     }
 }
 
-@ValidatorConstraint({ name: 'isNotInPast', async: false })
-export class IsNotInPastConstraint implements ValidatorConstraintInterface {
-    validate(value: any): boolean {
-        if (!value) return true; // Optional field
-        const date = new Date(value);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        return date >= today;
-    }
-
-    defaultMessage(): string {
-        return 'Date cannot be in the past';
-    }
-}
-
 // Custom decorators
 export function IsPositiveAmount(validationOptions?: ValidationOptions) {
     return function (object: Object, propertyName: string) {
@@ -88,18 +73,6 @@ export function IsValidPostalCode(validationOptions?: ValidationOptions) {
             options: validationOptions,
             constraints: [],
             validator: IsValidPostalCodeConstraint,
-        });
-    };
-}
-
-export function IsNotInPast(validationOptions?: ValidationOptions) {
-    return function (object: Object, propertyName: string) {
-        registerDecorator({
-            target: object.constructor,
-            propertyName: propertyName,
-            options: validationOptions,
-            constraints: [],
-            validator: IsNotInPastConstraint,
         });
     };
 }
