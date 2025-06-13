@@ -2,12 +2,6 @@ import { IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength, IsNumb
 import { IsValidPostalCode } from '../../lib/utils/validators';
 
 export class UpdateUserDTO {
-    @IsString() @IsNotEmpty() @MaxLength(50)
-    nomUtilisateur: string;
-
-    @IsString() @IsNotEmpty() @MaxLength(50)
-    prenomUtilisateur: string;
-
     @IsEmail() @IsOptional()
     login?: string;
 
@@ -21,8 +15,6 @@ export class UpdateUserDTO {
     codePostal?: number;
 
     constructor(nomUtilisateur: string, prenomUtilisateur: string, login?: string, mdp?: string, ville?: string, codePostal?: number) {
-        this.nomUtilisateur = nomUtilisateur;
-        this.prenomUtilisateur = prenomUtilisateur;
         this.login = login;
         this.mdp = mdp;
         this.ville = ville;

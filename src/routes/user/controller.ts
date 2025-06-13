@@ -27,7 +27,6 @@ router.put("/", auth, async (req: Request, res: Response, next: NextFunction) =>
     try {
         const userId = res.locals.user.idUtilisateur;
         const controlledBody: UpdateUserDTO = await bodyControl(UpdateUserDTO, req.body);
-
         const updatedUser: UserResponseDTO = await serviceUpdateUser(userId, controlledBody);
 
         res.status(SuccessResponses.USER_UPDATED.statusCode).json({

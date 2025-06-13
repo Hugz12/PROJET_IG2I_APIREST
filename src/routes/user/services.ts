@@ -59,55 +59,28 @@ export async function serviceUpdateUser(userId: number, userData: UpdateUserDTO)
             }
         }
 
-        // Build update query dynamically
-        const updateFields: string[] = [];
-        const updateValues: any[] = [];
+        // Prepare fields to update
+        const fields = [
+            ["login", userData.login],
+            ["mdp", userData.mdp ? await hashPassword(userData.mdp) : undefined],
+            ["ville", userData.ville],
+            ["codePostal", userData.codePostal]
+        ].filter(([_, value]) => value !== undefined);
 
-        if (userData.nomUtilisateur) {
-            updateFields.push("nomUtilisateur = ?");
-            updateValues.push(userData.nomUtilisateur);
-        }
-
-        if (userData.prenomUtilisateur) {
-            updateFields.push("prenomUtilisateur = ?");
-            updateValues.push(userData.prenomUtilisateur);
-        }
-
-        if (userData.login) {
-            updateFields.push("login = ?");
-            updateValues.push(userData.login);
-        }
-
-        if (userData.mdp) {
-            const hashedPassword = await hashPassword(userData.mdp);
-            updateFields.push("mdp = ?");
-            updateValues.push(hashedPassword);
-        }
-
-        if (userData.ville) {
-            updateFields.push("ville = ?");
-            updateValues.push(userData.ville);
-        }
-
-        if (userData.codePostal) {
-            updateFields.push("codePostal = ?");
-            updateValues.push(userData.codePostal);
-        }
-
-        if (updateFields.length === 0) {
+        if (fields.length === 0) {
             throw new ApiError({
-                internalCode: "NO_FIELDS_TO_UPDATE",
-                message: "No fields provided to update",
-                statusCode: 400
+            internalCode: "NO_FIELDS_TO_UPDATE",
+            message: "No fields provided to update",
+            statusCode: 400
             });
         }
 
-        updateValues.push(userId);
+        const setClause = fields.map(([key]) => `${key} = ?`).join(", ");
+        const values = fields.map(([_, value]) => value);
 
-        // Execute update
         await connection.query(
-            `UPDATE Utilisateur SET ${updateFields.join(", ")} WHERE idUtilisateur = ?`,
-            updateValues
+            `UPDATE Utilisateur SET ${setClause} WHERE idUtilisateur = ?`,
+            [...values, userId]
         );
 
         // Return updated user
