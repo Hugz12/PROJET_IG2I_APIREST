@@ -9,4 +9,19 @@ export const SuccessResponses = {
         message: "User logged in successfully",
         internalCode: "USER_LOGGED_IN"
     },
+    USER_DELETED: {
+        statusCode: 200,
+        message: "User deleted successfully",
+        internalCode: "USER_DELETED"
+    },
+    USER_UPDATED: {
+        statusCode: 200,
+        message: "User updated successfully",
+        internalCode: "USER_UPDATED"
+    },
+    USER_FETCHED: {
+        statusCode: 200,
+        message: "User data fetched successfully",
+        internalCode: "USER_FETCHED"
+    }
 }
