@@ -12,7 +12,7 @@ router.post("/register", async (req: Request, res: Response, next: NextFunction)
 
     // Call service to handle registration
     try {
-        const result = serviceRegister(controlledBody);
+        const result = await serviceRegister(controlledBody);
         res.status(SuccessResponses.USER_REGISTERED.statusCode).json({
             data: {
                 internalCode: SuccessResponses.USER_REGISTERED.internalCode,

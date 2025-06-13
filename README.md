@@ -26,10 +26,6 @@ npm run dev
 Il faut implémenter les routes suivantes :
 
 ```
-/user : 
-    / - GET : Fetch user data
-    / - PUT : Edit user data
-    / - DELETE : Delete user data
 /auth :
     /register - POST : Create user
     /login - POST : Connect user (give token)
@@ -39,9 +35,9 @@ Il faut implémenter les routes suivantes :
         / - GET : Fetch user’s account data
 /movement : 
     / - GET : Fetch all user movements
+    / - POST : Create a new movement
     /:idMovement - GET : Fetch movement details
-        / - POST : Create a new movement
-        / - GET : Search user’s accounts
+        / - GET : Fetch movement details
 /transfer : 
     / - GET : Fetch user related transfer infos
     / - POST : Transfer between two user account 
