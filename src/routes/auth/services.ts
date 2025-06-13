@@ -47,6 +47,7 @@ export async function serviceLogin(login: LoginDTO): Promise<{ token: string }> 
     if (!isPasswordValid) {
         throw new ApiError(ErrorResponses.INVALID_CREDENTIALS);
     }
+
     // Generate a JWT token
     const token = generateToken({ idUtilisateur: user.idUtilisateur, login: user.login });
 
