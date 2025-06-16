@@ -53,7 +53,7 @@ router.delete("/", authHandler, async (req: Request, res: Response, next: NextFu
         // Service call
         await serviceDeleteUser(user.idUtilisateur);
         // Response
-        res.status(SuccessResponses.USER_DELETED.statusCode)
+        res.status(SuccessResponses.USER_DELETED.statusCode);
     } catch (error) {
         next(error);
     }

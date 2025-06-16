@@ -29,4 +29,4 @@ export const SuccessResponses = {
         message: "Categories data fetched successfully",
         internalCode: "CATEGORIES_FETCHED"
     },
-}
+};
