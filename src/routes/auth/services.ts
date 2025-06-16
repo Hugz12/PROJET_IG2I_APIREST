@@ -11,7 +11,6 @@ export async function serviceRegister(register: RegisterDTO): Promise<boolean> {
     const connection = await getConnection();
 
     try {
-
         // Check if the user already exists
         const [rows]: any = await connection.query("SELECT count(*) as count FROM Utilisateur WHERE login = ?", [register.login]);
         if (rows[0].count > 0) {
@@ -29,8 +28,8 @@ export async function serviceRegister(register: RegisterDTO): Promise<boolean> {
 
         return true;
     } finally {
+        // Close the connection
         connection.release();
-        console.log("Connection released");
     }
 }
 
@@ -38,27 +37,28 @@ export async function serviceLogin(login: LoginDTO): Promise<{ token: string }> 
     // Start MySQL connection
     const connection = await getConnection();
 
-    // Check if the user exists
-    const [rows]: any = await connection.query("SELECT * FROM Utilisateur WHERE login = ?", [login.login]);
-    if (rows.length === 0) {
-        throw new ApiError(ErrorResponses.INVALID_CREDENTIALS);
+    try {
+        // Check if the user exists
+        const [rows]: any = await connection.query("SELECT * FROM Utilisateur WHERE login = ?", [login.login]);
+        if (rows.length === 0) {
+            throw new ApiError(ErrorResponses.INVALID_CREDENTIALS);
+        }
+        const user = rows[0];
+
+        // Verify the password
+        const isPasswordValid = await verifyPassword(login.mdp, user.mdp);
+        if (!isPasswordValid) {
+            throw new ApiError(ErrorResponses.INVALID_CREDENTIALS);
+        }
+
+        // Generate a JWT token
+        const token = generateToken({ idUtilisateur: user.idUtilisateur, login: user.login });
+
+        // Return the token
+        return { token };
+    } finally {
+        // Close the connection
+        connection.release();
     }
-    const user = rows[0];
-
-    console.log("User found:", user);
-
-    // Verify the password
-    const isPasswordValid = await verifyPassword(login.mdp, user.mdp);
-    if (!isPasswordValid) {
-        throw new ApiError(ErrorResponses.INVALID_CREDENTIALS);
-    }
-
-    // Generate a JWT token
-    console.log("Password is valid, generating token for user:", user.idUtilisateur, user.login);
-    const token = generateToken({ idUtilisateur: user.idUtilisateur, login: user.login });
-
-    connection.release();
-
-    return { token };
 }
 

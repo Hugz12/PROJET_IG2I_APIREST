@@ -3,19 +3,22 @@ import { bodyControl } from "lib/services/bodyControl";
 import { SuccessResponses } from "types/successResponses";
 import { UpdateUserDTO, UserResponseDTO } from "routes/user/schema";
 import { serviceGetUser, serviceUpdateUser, serviceDeleteUser } from "routes/user/services";
-import { authHandler as auth } from "middlewares/auth";
+import { authHandler } from "middlewares/auth";
 
 const router: Router = Router();
 
 // GET /user - Fetch user data
-router.get("/", auth, async (req: Request, res: Response, next: NextFunction) => {
+router.get("/", authHandler, async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userId = res.locals.user.idUtilisateur;
-        const user: UserResponseDTO = await serviceGetUser(userId);
+        // Enhance user
+        const user = res.locals.user;
+        // Service call
+        const result: UserResponseDTO = await serviceGetUser(user.idUtilisateur);
+        // Response
         res.status(SuccessResponses.USER_FETCHED.statusCode).json({
-            internalCode: SuccessResponses.USER_FETCHED.internalCode,
-            user: user,
-            message: SuccessResponses.USER_FETCHED.message
+            data: {
+                result
+            }
         });
     } catch (error) {
         next(error);
@@ -23,16 +26,19 @@ router.get("/", auth, async (req: Request, res: Response, next: NextFunction) =>
 });
 
 // PUT /user - Edit user data
-router.put("/", auth, async (req: Request, res: Response, next: NextFunction) => {
+router.put("/", authHandler, async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userId = res.locals.user.idUtilisateur;
+        // Enhance user
+        const user = res.locals.user;
+        // Body control
         const controlledBody: UpdateUserDTO = await bodyControl(UpdateUserDTO, req.body);
-        const updatedUser: UserResponseDTO = await serviceUpdateUser(userId, controlledBody);
-
+        // Service call
+        const result: UserResponseDTO = await serviceUpdateUser(user.idUtilisateur, controlledBody);
+        // Response
         res.status(SuccessResponses.USER_UPDATED.statusCode).json({
-            internalCode: SuccessResponses.USER_UPDATED.internalCode,
-            user: updatedUser,
-            message: SuccessResponses.USER_UPDATED.message
+            data: {
+                user: result
+            },
         });
     } catch (error) {
         next(error);
@@ -40,15 +46,14 @@ router.put("/", auth, async (req: Request, res: Response, next: NextFunction) =>
 });
 
 // DELETE /user - Delete user data
-router.delete("/", auth, async (req: Request, res: Response, next: NextFunction) => {
+router.delete("/", authHandler, async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userId = res.locals.user.idUtilisateur;
-        await serviceDeleteUser(userId);
-
-        res.status(SuccessResponses.USER_DELETED.statusCode).json({
-            internalCode: SuccessResponses.USER_DELETED.internalCode,
-            message: SuccessResponses.USER_DELETED.message
-        });
+        // Enhance user
+        const user = res.locals.user;
+        // Service call
+        await serviceDeleteUser(user.idUtilisateur);
+        // Response
+        res.status(SuccessResponses.USER_DELETED.statusCode)
     } catch (error) {
         next(error);
     }
