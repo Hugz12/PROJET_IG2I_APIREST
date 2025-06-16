@@ -44,7 +44,6 @@ export async function serviceGetAllCategories(): Promise<CategoryResponseDTO[]> 
         });
 
         return Array.from(categoryMap.values());
-        return categories;
     } finally {
         connection.release();
     }
