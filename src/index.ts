@@ -5,8 +5,8 @@ import authRoutes from './routes/auth/controller'; // Uncomment when auth routes
 import userRoutes from './routes/user/controller';
 
 // Middlewares import
-import { jsonErrorHandler } from './middlewares/JSONErrors';
-import { notFoundHandler } from './middlewares/notFound';
+import { jsonErrorHandler } from './middlewares/json-errors';
+import { notFoundHandler } from './middlewares/not-found';
 import { errorHandler } from './middlewares/errors';
 
 // Server setup

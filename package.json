@@ -7,7 +7,8 @@
     "build": "node build.mjs",
     "start": "node dist/bundle.js",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "data:generate": "node db-filler.js"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +28,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.8.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "dotenv": "^16.5.0",

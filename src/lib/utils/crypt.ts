@@ -21,6 +21,7 @@ export function verifyPassword(password: string, storedHash: string): boolean {
     const [salt, hash] = storedHash.split(":");
 
     if (!salt || !hash) {
+        console.error("Hash format invalide");
         throw new Error("Hash format invalide");
     }
 

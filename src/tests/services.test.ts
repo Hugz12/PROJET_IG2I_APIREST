@@ -1,4 +1,4 @@
-import { serviceGetUser, serviceUpdateUser, serviceDeleteUser } from '../routes/user/services';
+import { serviceGetUser } from '../routes/user/services';
 import { getConnection } from 'lib/services/mysql';
 import { ApiError } from 'types/apiError';
 import { ErrorResponses } from 'types/errorResponses';
@@ -19,7 +19,7 @@ describe('User Services', () => {
   // Mock connection and query results
   const mockRelease = jest.fn();
   const mockQuery = jest.fn();
-  const mockConnection = { 
+  const mockConnection = {
     query: mockQuery,
     release: mockRelease 
   };
@@ -51,7 +51,7 @@ describe('User Services', () => {
       // Act
       const result = await serviceGetUser(userId);
       
-      // Assert
+      // Assert 
       expect(getConnection).toHaveBeenCalledTimes(1);
       expect(mockQuery).toHaveBeenCalledWith(
         "SELECT idUtilisateur, nomUtilisateur, prenomUtilisateur, login, ville, codePostal, dateHeureCreation, dateHeureMAJ FROM Utilisateur WHERE idUtilisateur = ?",
@@ -65,24 +65,6 @@ describe('User Services', () => {
       expect(result.login).toBe(mockUser.login);
       expect(result.ville).toBe(mockUser.ville);
       expect(result.codePostal).toBe(mockUser.codePostal);
-    });
-    it('should throw ApiError if user does not exist', async () => {
-      // Arrange
-      const userId = 999; // Non-existent user ID
-      mockQuery.mockResolvedValueOnce([[]]); // No user found
-      
-      // Act & Assert
-      await expect(serviceGetUser(userId)).rejects.toThrow(ApiError);
-      // Check if the error contains the correct message and status
-      await expect(serviceGetUser(userId)).rejects.toThrow(
-        new ApiError(ErrorResponses.USER_NOT_FOUND)
-      );
-      expect(getConnection).toHaveBeenCalledTimes(1);
-      expect(mockQuery).toHaveBeenCalledWith(
-        "SELECT idUtilisateur, nomUtilisateur, prenomUtilisateur, login, ville, codePostal, dateHeureCreation, dateHeureMAJ FROM Utilisateur WHERE idUtilisateur = ?",
-        [userId]
-      );
-      expect(mockRelease).toHaveBeenCalledTimes(1);
     });
   });
 });

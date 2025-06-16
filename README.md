@@ -21,6 +21,17 @@ npm install
 npm run dev
 ```
 
+## Test
+
+La commande `npm run data:generate` permet de générer des données d'exemples.
+Elle créer également un compte de test:
+```
+{
+    "login":"hugo.laloy@mail.com",
+    "mdp":"password123"
+}
+```
+
 ## ToDo
 
 Il faut implémenter les routes suivantes :
