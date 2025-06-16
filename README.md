@@ -11,7 +11,7 @@ DATABASE_USER=IG2I
 DATABASE_PASSWORD=motdepasse
 DATABASE_NAME=money
 DATABASE_PORT=3306
-JWT_TOKEN=key
+JWT_SECRET=key
 ```
 
 Executer ces commandes :
@@ -19,6 +19,17 @@ Executer ces commandes :
 podman-compose up -d
 npm install
 npm run dev
+```
+
+## Test
+
+La commande `npm run data:generate` permet de générer des données d'exemples.
+Elle crée également un compte de test:
+```
+{
+    "login":"hugo.laloy@mail.com",
+    "mdp":"password123"
+}
 ```
 
 ## ToDo

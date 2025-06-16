@@ -11,6 +11,7 @@ export interface TokenPayload extends JwtPayload {
 
 export function generateToken(payload: object): string {
     try {
+        console.log(JWT_SECRET);
         return jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
     } catch (error) {
         console.error("Error generating token:", error);
