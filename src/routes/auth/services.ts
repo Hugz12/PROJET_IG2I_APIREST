@@ -38,30 +38,27 @@ export async function serviceLogin(login: LoginDTO): Promise<{ token: string }> 
     // Start MySQL connection
     const connection = await getConnection();
 
-    try {
-        // Check if the user exists
-        const [rows]: any = await connection.query("SELECT * FROM Utilisateur WHERE login = ?", [login.login]);
-        if (rows.length === 0) {
-            throw new ApiError(ErrorResponses.INVALID_CREDENTIALS);
-        }
-        const user = rows[0];
-
-        // Verify the password
-        const isPasswordValid = await verifyPassword(login.mdp, user.mdp);
-        if (!isPasswordValid) {
-            throw new ApiError(ErrorResponses.INVALID_CREDENTIALS);
-        }
-
-        // Generate a JWT token
-        const token = generateToken({ idUtilisateur: user.idUtilisateur, login: user.login });
-
-
-        // Close the connection
-        return { token };
-        return { token: "string" };
-    } finally {
-        connection.release();
-        console.log("Connection released");
+    // Check if the user exists
+    const [rows]: any = await connection.query("SELECT * FROM Utilisateur WHERE login = ?", [login.login]);
+    if (rows.length === 0) {
+        throw new ApiError(ErrorResponses.INVALID_CREDENTIALS);
     }
+    const user = rows[0];
+
+    console.log("User found:", user);
+
+    // Verify the password
+    const isPasswordValid = await verifyPassword(login.mdp, user.mdp);
+    if (!isPasswordValid) {
+        throw new ApiError(ErrorResponses.INVALID_CREDENTIALS);
+    }
+
+    // Generate a JWT token
+    console.log("Password is valid, generating token for user:", user.idUtilisateur, user.login);
+    const token = generateToken({ idUtilisateur: user.idUtilisateur, login: user.login });
+
+    connection.release();
+
+    return { token };
 }
 
