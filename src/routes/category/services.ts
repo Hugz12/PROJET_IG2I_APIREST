@@ -9,36 +9,41 @@ export async function serviceGetAllCategories(): Promise<CategoryResponseDTO[]> 
 
     try {
         // Get all categories
-        const [categoriesRows]: any = await connection.query(
-            "SELECT * FROM Categorie ORDER BY nomCategorie"
+        const [rows]: any = await connection.query(
+            `SELECT 
+                c.idCategorie, c.nomCategorie, c.dateHeureCreation AS catDateHeureCreation, c.dateHeureMAJ AS catDateHeureMAJ,
+                s.idSousCategorie, s.nomSousCategorie, s.idcategorie AS subIdCategorie, s.dateHeureCreation AS subDateHeureCreation, s.dateHeureMAJ AS subDateHeureMAJ
+             FROM Categorie c
+             LEFT JOIN SousCategorie s ON s.idcategorie = c.idCategorie
+             ORDER BY c.nomCategorie, s.nomSousCategorie`
         );
 
-        // Get all subcategories
-        const [subCategoriesRows]: any = await connection.query(
-            "SELECT * FROM SousCategorie ORDER BY nomSousCategorie"
-        );
-
-        // Map subcategories to their parent categories
-        const categories: CategoryResponseDTO[] = categoriesRows.map((cat: any) => {
-            const subCategories = subCategoriesRows
-                .filter((sub: any) => sub.idcategorie === cat.idCategorie)
-                .map((sub: any) => new SubCategoryResponseDTO(
-                    sub.idSousCategorie,
-                    sub.nomSousCategorie,
-                    sub.idcategorie,
-                    sub.dateHeureCreation,
-                    sub.dateHeureMAJ
+        // Group results by category
+        const categoryMap: Map<number, CategoryResponseDTO> = new Map();
+        rows.forEach((row: any) => {
+            if (!categoryMap.has(row.idCategorie)) {
+                categoryMap.set(row.idCategorie, new CategoryResponseDTO(
+                    row.idCategorie,
+                    row.nomCategorie,
+                    row.catDateHeureCreation,
+                    row.catDateHeureMAJ,
+                    []
                 ));
+            }
 
-            return new CategoryResponseDTO(
-                cat.idCategorie,
-                cat.nomCategorie,
-                cat.dateHeureCreation,
-                cat.dateHeureMAJ,
-                subCategories
-            );
+            if (row.idSousCategorie) {
+                const subCategory = new SubCategoryResponseDTO(
+                    row.idSousCategorie,
+                    row.nomSousCategorie,
+                    row.subIdCategorie,
+                    row.subDateHeureCreation,
+                    row.subDateHeureMAJ
+                );
+                categoryMap.get(row.idCategorie)?.subCategories.push(subCategory);
+            }
         });
 
+        return Array.from(categoryMap.values());
         return categories;
     } finally {
         connection.release();
