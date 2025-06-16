@@ -64,14 +64,16 @@ export async function serviceUpdateUser(userId: number, userData: UpdateUserDTO)
             ["login", userData.login],
             ["mdp", userData.mdp ? await hashPassword(userData.mdp) : undefined],
             ["ville", userData.ville],
-            ["codePostal", userData.codePostal]
+            ["codePostal", userData.codePostal],
+            ["nomUtilisateur", userData.nomUtilisateur],
+            ["prenomUtilisateur", userData.prenomUtilisateur]
         ].filter(([_, value]) => value !== undefined);
 
         if (fields.length === 0) {
             throw new ApiError({
-            internalCode: "NO_FIELDS_TO_UPDATE",
-            message: "No fields provided to update",
-            statusCode: 400
+                internalCode: "NO_FIELDS_TO_UPDATE",
+                message: "No fields provided to update",
+                statusCode: 400
             });
         }
 
