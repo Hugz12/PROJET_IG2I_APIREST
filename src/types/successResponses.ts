@@ -23,5 +23,10 @@ export const SuccessResponses = {
         statusCode: 200,
         message: "User data fetched successfully",
         internalCode: "USER_FETCHED"
-    }
+    },
+    CATEGORIES_FETCHED: {
+        statusCode: 200,
+        message: "Categories data fetched successfully",
+        internalCode: "CATEGORIES_FETCHED"
+    },
 }
