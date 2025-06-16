@@ -26,8 +26,8 @@ router.get("/", authHandler, async (req: Request, res: Response, next: NextFunct
     }
 });
 
-// PUT /user - Edit user data
-router.put("/", authHandler, async (req: Request, res: Response, next: NextFunction) => {
+// PATCH /user - Edit user data
+router.patch("/", authHandler, async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Enhance user
         const user = res.locals.user;
