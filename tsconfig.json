@@ -10,7 +10,7 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
     "resolveJsonModule": true,
-    "types": ["node"],
+    "types": ["node", "jest"],
     "baseUrl": "./src"
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts"],

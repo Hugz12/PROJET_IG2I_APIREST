@@ -6,8 +6,8 @@ import userRoutes from './routes/user/controller';
 import categoryRoutes from './routes/category/controller';
 
 // Middlewares import
-import { jsonErrorHandler } from './middlewares/JSONErrors';
-import { notFoundHandler } from './middlewares/notFound';
+import { jsonErrorHandler } from './middlewares/json-errors';
+import { notFoundHandler } from './middlewares/not-found';
 import { errorHandler } from './middlewares/errors';
 
 // Server setup
