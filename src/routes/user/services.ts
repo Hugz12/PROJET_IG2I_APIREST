@@ -92,7 +92,7 @@ export async function serviceUpdateUser(userId: number, userData: UpdateUserDTO)
     }
 }
 
-export async function serviceDeleteUser(userId: number): Promise<void> {
+export async function serviceDeleteUser(userId: number): Promise<boolean> {
     const connection = await getConnection();
 
     try {
@@ -101,16 +101,20 @@ export async function serviceDeleteUser(userId: number): Promise<void> {
             "SELECT idUtilisateur FROM Utilisateur WHERE idUtilisateur = ?",
             [userId]
         );
+        console.log(existingUser);
+        console.log(existingUser.length);
 
         if (existingUser.length === 0) {
             throw new ApiError(ErrorResponses.USER_NOT_FOUND);
         }
 
         // Delete user (CASCADE will handle related records)
-        await connection.query(
+        const result = await connection.query(
             "DELETE FROM Utilisateur WHERE idUtilisateur = ?",
             [userId]
         );
+
+        return true;
     } finally {
         connection.release();
     }

@@ -6,7 +6,7 @@ import { hashPassword, verifyPassword } from "lib/utils/crypt";
 import { LoginDTO, RegisterDTO } from "routes/auth/schema";
 
 
-export async function serviceRegister(register: RegisterDTO): Promise<boolean> {
+export async function serviceRegister(register: RegisterDTO): Promise<{token: string}> {
     // Start MySQL connection
     const connection = await getConnection();
 
@@ -26,7 +26,12 @@ export async function serviceRegister(register: RegisterDTO): Promise<boolean> {
             [register.login, hashedPassword, register.nomUtilisateur, register.prenomUtilisateur, register.ville, register.codePostal]
         );
 
-        return true;
+        // Generate a JWT token
+        const token = generateToken({ idUtilisateur: result.insertId, login: register.login });
+
+        // Return the token
+        return { token };
+        
     } finally {
         // Close the connection
         connection.release();

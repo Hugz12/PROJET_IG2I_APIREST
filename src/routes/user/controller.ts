@@ -4,6 +4,7 @@ import { SuccessResponses } from "types/successResponses";
 import { UpdateUserDTO, UserResponseDTO } from "routes/user/schema";
 import { serviceGetUser, serviceUpdateUser, serviceDeleteUser } from "routes/user/services";
 import { authHandler } from "middlewares/auth";
+import { TokenPayload } from "lib/services/jwt";
 
 const router: Router = Router();
 
@@ -49,11 +50,12 @@ router.put("/", authHandler, async (req: Request, res: Response, next: NextFunct
 router.delete("/", authHandler, async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Enhance user
-        const user = res.locals.user;
+        const user: TokenPayload = res.locals.user;
+        console.log("User to delete:", user);
         // Service call
         await serviceDeleteUser(user.idUtilisateur);
         // Response
-        res.status(SuccessResponses.USER_DELETED.statusCode);
+        res.sendStatus(SuccessResponses.USER_DELETED.statusCode);
     } catch (error) {
         next(error);
     }
