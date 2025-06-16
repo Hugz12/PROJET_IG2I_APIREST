@@ -39,7 +39,7 @@ export async function serviceGetAllCategories(): Promise<CategoryResponseDTO[]> 
                     row.subDateHeureCreation,
                     row.subDateHeureMAJ
                 );
-                categoryMap.get(row.idCategorie)?.subCategories.push(subCategory);
+                categoryMap.get(row.idCategorie)?.sousCategories?.push(subCategory);
             }
         });
 
