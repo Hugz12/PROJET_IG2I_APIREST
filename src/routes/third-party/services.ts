@@ -5,6 +5,8 @@ import {
     UpdateThirdPartyDTO 
 } from "routes/third-party/schema";
 
+const DEFAULT_USER_ID = 1;
+
 export async function serviceGetThirdPartyById(id: number): Promise<ThirdPartyResponseDTO | null> {
     const connection = await getConnection();
 
@@ -48,13 +50,13 @@ export async function serviceCreateThirdParty(thirdPartyData: CreateThirdPartyDT
         const [result]: any = await connection.query(
             `INSERT INTO Tiers (nomTiers, idUtilisateur, dateHeureCreation)
              VALUES (?, ?, ?)`,
-            [thirdPartyName, userId || 1, currentDate]
+            [thirdPartyName, userId || DEFAULT_USER_ID, currentDate]
         );
 
         return new ThirdPartyResponseDTO(
             result.insertId,
             thirdPartyName,
-            userId || 1,
+            userId || DEFAULT_USER_ID,
             currentDate
         );
     } finally {
