@@ -21,7 +21,7 @@ export async function serviceRegister(register: RegisterDTO): Promise<{token: st
         const hashedPassword = await hashPassword(register.mdp);
 
         // Insert the new user into the database
-        await connection.query(
+        const [result]: any = await connection.query(
             "INSERT INTO Utilisateur (login, mdp, nomUtilisateur, prenomUtilisateur, ville, codePostal) VALUES (?, ?, ?, ?, ?, ?)",
             [register.login, hashedPassword, register.nomUtilisateur, register.prenomUtilisateur, register.ville, register.codePostal]
         );
@@ -31,7 +31,7 @@ export async function serviceRegister(register: RegisterDTO): Promise<{token: st
 
         // Return the token
         return { token };
-        
+
     } finally {
         // Close the connection
         connection.release();
