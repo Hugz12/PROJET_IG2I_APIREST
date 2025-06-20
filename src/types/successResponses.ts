@@ -29,4 +29,24 @@ export const SuccessResponses = {
         message: "Categories data fetched successfully",
         internalCode: "CATEGORIES_FETCHED"
     },
+    THIRD_PARTY_CREATED: {
+        statusCode: 201,
+        message: "Third party created successfully",
+        internalCode: "THIRD_PARTY_CREATED"
+    },
+    THIRD_PARTIES_FETCHED: {
+        statusCode: 200,
+        message: "Third parties data fetched successfully",
+        internalCode: "THIRD_PARTIES_FETCHED"
+    },
+    THIRD_PARTY_UPDATED: {
+        statusCode: 200,
+        message: "Third party updated successfully",
+        internalCode: "THIRD_PARTY_UPDATED"
+    },
+    THIRD_PARTY_DELETED: {
+        statusCode: 204,
+        message: "Third party deleted successfully",
+        internalCode: "THIRD_PARTY_DELETED"
+    },
 }
