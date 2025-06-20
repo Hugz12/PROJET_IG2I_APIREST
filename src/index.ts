@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 
 // Routes import
 import authRoutes from './routes/auth/controller'; // Uncomment when auth routes are implemented
@@ -7,9 +7,9 @@ import categoryRoutes from './routes/category/controller';
 import thirdPartyRoutes from './routes/third-party/controller';
 
 // Middlewares import
-import { jsonErrorHandler } from './middlewares/json-errors';
-import { notFoundHandler } from './middlewares/not-found';
-import { errorHandler } from './middlewares/errors';
+import { jsonErrorHandler } from "./middlewares/json-errors";
+import { notFoundHandler } from "./middlewares/not-found";
+import { errorHandler } from "./middlewares/errors";
 
 // Server setup
 const app = express();
@@ -36,6 +36,6 @@ try {
         console.log(`Server is running at http://localhost:${port}`);
     });
 } catch (error) {
-    console.error('Error starting the server:', error);
+    console.error("Error starting the server:", error);
     process.exit(1);
 }

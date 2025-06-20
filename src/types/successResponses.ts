@@ -10,7 +10,7 @@ export const SuccessResponses = {
         internalCode: "USER_LOGGED_IN"
     },
     USER_DELETED: {
-        statusCode: 200,
+        statusCode: 204,
         message: "User deleted successfully",
         internalCode: "USER_DELETED"
     },
@@ -49,4 +49,4 @@ export const SuccessResponses = {
         message: "Third party deleted successfully",
         internalCode: "THIRD_PARTY_DELETED"
     },
-}
+};

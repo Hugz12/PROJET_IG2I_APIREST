@@ -4,6 +4,7 @@ import { SuccessResponses } from "types/successResponses";
 import { UpdateUserDTO, UserResponseDTO } from "routes/user/schema";
 import { serviceGetUser, serviceUpdateUser, serviceDeleteUser } from "routes/user/services";
 import { authHandler } from "middlewares/auth";
+import { TokenPayload } from "lib/services/jwt";
 
 const router: Router = Router();
 
@@ -11,13 +12,13 @@ const router: Router = Router();
 router.get("/", authHandler, async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Enhance user
-        const user = res.locals.user;
+        const userId = res.locals.user.idUtilisateur;
         // Service call
-        const result: UserResponseDTO = await serviceGetUser(user.idUtilisateur);
+        const user: UserResponseDTO = await serviceGetUser(userId);
         // Response
         res.status(SuccessResponses.USER_FETCHED.statusCode).json({
             data: {
-                result
+                user: user,
             }
         });
     } catch (error) {
@@ -25,8 +26,8 @@ router.get("/", authHandler, async (req: Request, res: Response, next: NextFunct
     }
 });
 
-// PUT /user - Edit user data
-router.put("/", authHandler, async (req: Request, res: Response, next: NextFunction) => {
+// PATCH /user - Edit user data
+router.patch("/", authHandler, async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Enhance user
         const user = res.locals.user;
@@ -37,7 +38,7 @@ router.put("/", authHandler, async (req: Request, res: Response, next: NextFunct
         // Response
         res.status(SuccessResponses.USER_UPDATED.statusCode).json({
             data: {
-                user: result
+                user: result,
             },
         });
     } catch (error) {
@@ -49,11 +50,12 @@ router.put("/", authHandler, async (req: Request, res: Response, next: NextFunct
 router.delete("/", authHandler, async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Enhance user
-        const user = res.locals.user;
+        const user: TokenPayload = res.locals.user;
+        console.log("User to delete:", user);
         // Service call
         await serviceDeleteUser(user.idUtilisateur);
         // Response
-        res.status(SuccessResponses.USER_DELETED.statusCode)
+        res.sendStatus(SuccessResponses.USER_DELETED.statusCode);
     } catch (error) {
         next(error);
     }

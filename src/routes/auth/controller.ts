@@ -15,7 +15,7 @@ router.post("/register", async (req: Request, res: Response, next: NextFunction)
         // Response
         res.status(SuccessResponses.USER_REGISTERED.statusCode).json({
             data: {
-                user: result,
+                token: result.token,
             },
         });
     } catch (error) {
@@ -32,7 +32,7 @@ router.post("/login", async (req: Request, res: Response, next: NextFunction) =>
         // Response
         res.status(SuccessResponses.USER_LOGGED_IN.statusCode).json({
             data: {
-                user: result,
+                token: result.token,
             },
         });
     } catch (error) {
