@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import { SuccessResponses } from "types/successResponses";
 import { serviceCreateThirdParty, serviceDeleteThirdParty, serviceGetAllThirdParties, serviceUpdateThirdParty } from "./services";
 import { authHandler } from "middlewares/auth";
-import { CreateThirdPartyDTO } from "./schema";
+import { CreateThirdPartyDTO, UpdateThirdPartyDTO } from "./schema";
 import { bodyControl } from "lib/services/bodyControl";
 import { ErrorResponses } from "types/errorResponses";
 
@@ -53,7 +53,7 @@ router.patch("/:id", authHandler, async (req: Request, res: Response, next: Next
             });
             return;
         }
-        const controlledBody: CreateThirdPartyDTO = await bodyControl(CreateThirdPartyDTO, req.body);
+        const controlledBody: UpdateThirdPartyDTO = await bodyControl(UpdateThirdPartyDTO, req.body);
         const updatedThirdParty = await serviceUpdateThirdParty(thirdPartyId, {
             thirdPartyName: controlledBody.thirdPartyName,
         });
