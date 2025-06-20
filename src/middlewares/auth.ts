@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "lib/services/jwt";
+import { TokenPayload, verifyToken } from "lib/services/jwt";
 import { ErrorResponses } from "types/errorResponses";
 
 export function authHandler(req: Request, res: Response, next: NextFunction): void {
@@ -16,7 +16,7 @@ export function authHandler(req: Request, res: Response, next: NextFunction): vo
     }
 
     // Check token validity
-    const decoded = verifyToken(token);
+    const decoded = verifyToken(token) as TokenPayload | null;
     if (!decoded) {
         res.status(ErrorResponses.INVALID_TOKEN.statusCode).json({
             error: {

@@ -4,6 +4,8 @@ import {
     CreateThirdPartyDTO, 
     UpdateThirdPartyDTO 
 } from "routes/third-party/schema";
+import { ApiError } from "types/apiError";
+import { ErrorResponses } from "types/errorResponses";
 
 const DEFAULT_USER_ID = 1;
 
@@ -40,23 +42,23 @@ export async function serviceGetThirdPartyById(id: number): Promise<ThirdPartyRe
     }
 }
 
-export async function serviceCreateThirdParty(thirdPartyData: CreateThirdPartyDTO): Promise<ThirdPartyResponseDTO> {
+export async function serviceCreateThirdParty(thirdPartyData: CreateThirdPartyDTO, userId: number): Promise<ThirdPartyResponseDTO> {
     const connection = await getConnection();
 
     try {
-        const { thirdPartyName, userId } = thirdPartyData;
+        const { thirdPartyName } = thirdPartyData;
         const currentDate = new Date();
         
         const [result]: any = await connection.query(
             `INSERT INTO Tiers (nomTiers, idUtilisateur, dateHeureCreation)
              VALUES (?, ?, ?)`,
-            [thirdPartyName, userId || DEFAULT_USER_ID, currentDate]
+            [thirdPartyName, userId, currentDate]
         );
 
         return new ThirdPartyResponseDTO(
             result.insertId,
             thirdPartyName,
-            userId || DEFAULT_USER_ID,
+            userId,
             currentDate
         );
     } finally {
@@ -66,45 +68,36 @@ export async function serviceCreateThirdParty(thirdPartyData: CreateThirdPartyDT
 
 export async function serviceUpdateThirdParty(
     id: number, 
-    thirdPartyData: UpdateThirdPartyDTO
+    thirdPartyData: UpdateThirdPartyDTO,
+    userId: number
 ): Promise<ThirdPartyResponseDTO | null> {
     const connection = await getConnection();
 
     try {
-        // First check if third party exists
         const existingThirdParty = await serviceGetThirdPartyById(id);
+
         if (!existingThirdParty) {
-            return null;
+            throw new ApiError({
+                internalCode: ErrorResponses.NOT_FOUND.internalCode,
+                message: ErrorResponses.NOT_FOUND.message,
+                statusCode: ErrorResponses.NOT_FOUND.statusCode
+            });
         }
-
+        else if (existingThirdParty.userId !== userId) {
+            throw new ApiError({
+                internalCode: ErrorResponses.UNAUTHORIZED.internalCode,
+                message: ErrorResponses.UNAUTHORIZED.message,
+                statusCode: ErrorResponses.UNAUTHORIZED.statusCode
+            });
+        }
+        
         const { thirdPartyName } = thirdPartyData;
-        const updateFields = [];
-        const updateValues = [];
-
-        // Build dynamic update query
-        if (thirdPartyName !== undefined) {
-            updateFields.push('nomTiers = ?');
-            updateValues.push(thirdPartyName);
-        }
-
-        if (updateFields.length === 0) {
-            // No fields to update, return existing record
-            return existingThirdParty;
-        }
-
-        // Add dateHeureMAJ
-        updateFields.push('dateHeureMAJ = ?');
-        const currentDate = new Date();
-        updateValues.push(currentDate);
-
-        // Add ID for WHERE clause
-        updateValues.push(id);
 
         await connection.query(
             `UPDATE Tiers 
-             SET ${updateFields.join(', ')} 
+             SET nomTiers = ? 
              WHERE idTiers = ?`,
-            updateValues
+            [thirdPartyName, id]
         );
 
         return new ThirdPartyResponseDTO(
@@ -112,17 +105,33 @@ export async function serviceUpdateThirdParty(
             thirdPartyName ?? existingThirdParty.thirdPartyName,
             existingThirdParty.userId,
             existingThirdParty.createdAt,
-            currentDate
         );
     } finally {
         connection.release();
     }
 }
 
-export async function serviceDeleteThirdParty(id: number): Promise<boolean> {
+export async function serviceDeleteThirdParty(id: number, userId: number): Promise<boolean> {
     const connection = await getConnection();
 
     try {
+        const existingThirdParty = await serviceGetThirdPartyById(id);
+        
+         if (!existingThirdParty) {
+            throw new ApiError({
+                internalCode: ErrorResponses.NOT_FOUND.internalCode,
+                message: ErrorResponses.NOT_FOUND.message,
+                statusCode: ErrorResponses.NOT_FOUND.statusCode
+            });
+        }
+        else if (existingThirdParty.userId !== userId) {
+            throw new ApiError({
+                internalCode: ErrorResponses.UNAUTHORIZED.internalCode,
+                message: ErrorResponses.UNAUTHORIZED.message,
+                statusCode: ErrorResponses.UNAUTHORIZED.statusCode
+            });
+        }
+
         const [result]: any = await connection.query(
             'DELETE FROM Tiers WHERE idTiers = ?',
             [id]

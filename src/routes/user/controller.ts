@@ -42,6 +42,7 @@ router.patch("/", authHandler, async (req: Request, res: Response, next: NextFun
             },
         });
     } catch (error) {
+        console.error("Error updating user:", error);
         next(error);
     }
 });

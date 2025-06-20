@@ -15,7 +15,7 @@ router.get("/", authHandler, async (req: Request, res: Response, next: NextFunct
         const thirdParties = await serviceGetThirdPartiesByUserId(user.idUtilisateur);
 
         res.status(SuccessResponses.THIRD_PARTIES_FETCHED.statusCode).json({
-            data: {thirdParties: thirdParties},
+            data: { thirdParties: thirdParties },
         });
     } catch (error) {
         next(error);
@@ -28,10 +28,10 @@ router.post("/", authHandler, async (req: Request, res: Response, next: NextFunc
 
         const controlledBody: CreateThirdPartyDTO = await bodyControl(CreateThirdPartyDTO, req.body);
 
-        const newThirdParty = await serviceCreateThirdParty({ thirdPartyName: controlledBody.thirdPartyName, userId: user.idUtilisateur });
+        const newThirdParty = await serviceCreateThirdParty({ thirdPartyName: controlledBody.thirdPartyName}, user.idUtilisateur );
 
         res.status(SuccessResponses.THIRD_PARTY_CREATED.statusCode).json({
-            data: {thirdParty: newThirdParty},
+            data: { thirdParty: newThirdParty },
         });
 
     } catch (error) {
@@ -44,6 +44,7 @@ router.patch("/:id", authHandler, async (req: Request, res: Response, next: Next
     try {
         const user = res.locals.user;
         const thirdPartyId = parseInt(req.params.id, 10);
+
         if (isNaN(thirdPartyId)) {
             res.status(ErrorResponses.INVALID_PARAMS.statusCode).json({
                 error: {
@@ -54,11 +55,15 @@ router.patch("/:id", authHandler, async (req: Request, res: Response, next: Next
             return;
         }
         const controlledBody: UpdateThirdPartyDTO = await bodyControl(UpdateThirdPartyDTO, req.body);
+
+
         const updatedThirdParty = await serviceUpdateThirdParty(thirdPartyId, {
-            thirdPartyName: controlledBody.thirdPartyName,
-        });
+            thirdPartyName: controlledBody.thirdPartyName
+        },
+            user.idUtilisateur
+        );
         res.status(SuccessResponses.THIRD_PARTY_UPDATED.statusCode).json({
-            data: {thirdParty: updatedThirdParty},
+            data: { thirdParty: updatedThirdParty },
         });
     } catch (error) {
         console.error("Error updating third party:", error);
@@ -79,7 +84,7 @@ router.delete("/:id", authHandler, async (req: Request, res: Response, next: Nex
             });
             return;
         }
-        await serviceDeleteThirdParty(thirdPartyId);
+        await serviceDeleteThirdParty(thirdPartyId, user.idUtilisateur);
         res.status(SuccessResponses.THIRD_PARTY_DELETED.statusCode).json();
     } catch (error) {
         console.error("Error deleting third party:", error);
