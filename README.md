@@ -56,6 +56,7 @@ Il faut implémenter les routes suivantes :
     / - GET : Fetch all third parties associated to an user
     / - POST : Create Third Party
     / - PATCH : Update Third Party
+    / - DELETE : Delete Third Party
 /category : 
     / - GET : Fetch all categories and subcategories
 ```
