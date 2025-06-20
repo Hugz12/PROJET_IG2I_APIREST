@@ -12,13 +12,13 @@ const router: Router = Router();
 router.get("/", authHandler, async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Enhance user
-        const user = res.locals.user;
+        const userId = res.locals.user.idUtilisateur;
         // Service call
-        const result: UserResponseDTO = await serviceGetUser(user.idUtilisateur);
+        const user: UserResponseDTO = await serviceGetUser(userId);
         // Response
         res.status(SuccessResponses.USER_FETCHED.statusCode).json({
             data: {
-                result
+                user: user,
             }
         });
     } catch (error) {
@@ -38,7 +38,7 @@ router.patch("/", authHandler, async (req: Request, res: Response, next: NextFun
         // Response
         res.status(SuccessResponses.USER_UPDATED.statusCode).json({
             data: {
-                user: result
+                user: result,
             },
         });
     } catch (error) {
