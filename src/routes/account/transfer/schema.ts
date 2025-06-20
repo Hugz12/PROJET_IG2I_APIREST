@@ -1,10 +1,4 @@
-import {
-	IsDateString,
-	IsNotEmpty,
-	IsNumber,
-	IsOptional,
-	Max,
-} from "class-validator";
+import { IsDateString, IsNotEmpty, IsNumber, IsOptional, Max } from "class-validator";
 import { IsPositiveAmount } from "lib/utils/validators";
 
 export class CreateTransferDTO {
@@ -82,5 +76,21 @@ export class TransferResponseDTO {
 		this.dateHeureMAJ = dateHeureMAJ;
 		this.idTiers = idTiers;
 		this.idCategorie = idCategorie;
+	}
+}
+
+export class FetchTransfersByAccountIdDTO {
+	idCompte: number;
+
+	constructor(idCompte: number) {
+		this.idCompte = idCompte;
+	}
+}
+
+export class FetchTransfersByAccountIdResponseDTO {
+	transfers: TransferResponseDTO[];
+
+	constructor(transfers: TransferResponseDTO[]) {
+		this.transfers = transfers;
 	}
 }
