@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { SuccessResponses } from "types/successResponses";
-import { serviceCreateThirdParty, serviceDeleteThirdParty, serviceGetAllThirdParties, serviceUpdateThirdParty } from "./services";
+import { serviceCreateThirdParty, serviceDeleteThirdParty, serviceUpdateThirdParty, serviceGetThirdPartiesByUserId } from "./services";
 import { authHandler } from "middlewares/auth";
 import { CreateThirdPartyDTO, UpdateThirdPartyDTO } from "./schema";
 import { bodyControl } from "lib/services/bodyControl";
@@ -12,7 +12,7 @@ router.get("/", authHandler, async (req: Request, res: Response, next: NextFunct
     try {
         const user = res.locals.user;
 
-        const thirdParties = await serviceGetAllThirdParties(user.idUtilisateur);
+        const thirdParties = await serviceGetThirdPartiesByUserId(user.idUtilisateur);
 
         res.status(SuccessResponses.THIRD_PARTIES_FETCHED.statusCode).json({
             data: {thirdParties: thirdParties},

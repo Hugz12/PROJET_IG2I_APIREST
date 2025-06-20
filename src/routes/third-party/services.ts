@@ -1,42 +1,9 @@
-import { fi } from "@faker-js/faker/.";
 import { getConnection } from "lib/services/mysql";
 import { 
     ThirdPartyResponseDTO, 
     CreateThirdPartyDTO, 
     UpdateThirdPartyDTO 
 } from "routes/third-party/schema";
-
-export async function serviceGetAllThirdParties(userId: number): Promise<ThirdPartyResponseDTO[]> {
-    const connection = await getConnection();
-
-    try {
-        const [rows]: any = await connection.query(
-            `SELECT 
-                idTiers AS thirdPartyId, 
-                nomTiers AS thirdPartyName, 
-                idUtilisateur AS userId,
-                dateHeureCreation AS createdAt, 
-                dateHeureMAJ AS updatedAt
-             FROM Tiers
-             WHERE idUtilisateur = ?
-             ORDER BY nomTiers`,
-            [userId]
-        );
-
-        return rows.map((row: any) => new ThirdPartyResponseDTO(
-            row.thirdPartyId,
-            row.thirdPartyName,
-            row.userId,
-            row.createdAt,
-            row.updatedAt
-        ));
-    } catch (error) {
-        console.error("Error fetching third parties:", error);
-        return []; // Return an empty array on error
-    } finally {
-        connection.release();
-    }
-}
 
 export async function serviceGetThirdPartyById(id: number): Promise<ThirdPartyResponseDTO | null> {
     const connection = await getConnection();
