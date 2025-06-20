@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "nodemon",
     "build": "node build.mjs",
-    "start": "node dist/bundle.js"
+    "start": "node dist/bundle.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "data:generate": "node db-filler.js"
   },
   "keywords": [],
   "author": "",
@@ -13,15 +16,22 @@
   "description": "",
   "devDependencies": {
     "@types/express": "^5.0.2",
+    "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.15.29",
     "esbuild": "^0.25.5",
+    "jest": "^30.0.0",
     "nodemon": "^3.1.10",
+    "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@eslint/js": "^9.29.0",
+    "@typescript-eslint/eslint-plugin": "^8.34.0",
+    "@typescript-eslint/parser": "^8.34.0",
+    "@faker-js/faker": "^9.8.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "dotenv": "^16.5.0",

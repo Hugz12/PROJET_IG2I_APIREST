@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import { ErrorResponses } from "types/errorResponses";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
@@ -17,7 +16,7 @@ export async function bodyControl<T extends object>(
 
     try {
         instance = plainToInstance(dtoClass, body);
-    } catch (error) {
+    } catch {
         throw new ApiError(ErrorResponses.INVALID_BODY);
     }
 
@@ -29,7 +28,7 @@ export async function bodyControl<T extends object>(
                 property: err.property,
                 constraints: err.constraints,
             })),
-        }
+        };
         throw new BodyError({
             message: ErrorResponses.INVALID_BODY.message,
             statusCode: ErrorResponses.INVALID_BODY.statusCode,

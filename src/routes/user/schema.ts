@@ -1,5 +1,5 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength, IsNumber } from 'class-validator';
-import { IsValidPostalCode } from '../../lib/utils/validators';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength, IsNumber } from "class-validator";
+import { IsValidPostalCode } from "lib/utils/validators";
 
 export class UpdateUserDTO {
     @IsEmail() @IsOptional()
@@ -14,11 +14,19 @@ export class UpdateUserDTO {
     @IsNumber() @IsOptional() @IsValidPostalCode()
     codePostal?: number;
 
+    @IsString() @IsOptional() @MaxLength(50) @IsNotEmpty()
+    nomUtilisateur?: string;
+
+    @IsString() @IsOptional() @MaxLength(50) @IsNotEmpty()
+    prenomUtilisateur?: string;
+
     constructor(nomUtilisateur: string, prenomUtilisateur: string, login?: string, mdp?: string, ville?: string, codePostal?: number) {
         this.login = login;
         this.mdp = mdp;
         this.ville = ville;
         this.codePostal = codePostal;
+        this.nomUtilisateur = nomUtilisateur;
+        this.prenomUtilisateur = prenomUtilisateur;
     }
 }
 

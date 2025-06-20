@@ -13,9 +13,9 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
         const categories = await serviceGetAllCategories();
 
         res.status(SuccessResponses.CATEGORIES_FETCHED.statusCode).json({
-            internalCode: SuccessResponses.CATEGORIES_FETCHED.internalCode,
-            categories: categories,
-            message: SuccessResponses.CATEGORIES_FETCHED.message
+            data: {
+                categories: categories,
+            }
         });
     } catch (error) {
         next(error);

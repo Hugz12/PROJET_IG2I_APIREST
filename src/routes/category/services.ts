@@ -1,7 +1,7 @@
 import { getConnection } from "lib/services/mysql";
-import { 
-    CategoryResponseDTO, 
-    SubCategoryResponseDTO 
+import {
+    CategoryResponseDTO,
+    SubCategoryResponseDTO
 } from "routes/category/schema";
 
 export async function serviceGetAllCategories(): Promise<CategoryResponseDTO[]> {

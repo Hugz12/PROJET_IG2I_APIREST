@@ -1,5 +1,5 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsString, MaxLength, MinLength } from 'class-validator';
-import { IsValidPostalCode } from 'lib/utils/validators';
+import { IsEmail, IsNotEmpty, IsNumber, IsString, MaxLength, MinLength } from "class-validator";
+import { IsValidPostalCode } from "lib/utils/validators";
 
 export class RegisterDTO {
     @IsEmail() @IsNotEmpty()

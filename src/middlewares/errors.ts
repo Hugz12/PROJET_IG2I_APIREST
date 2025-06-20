@@ -1,8 +1,8 @@
-import { ErrorRequestHandler, Request, NextFunction, Response } from "express";
+import { ErrorRequestHandler, Request, Response } from "express";
 import { ApiError, BodyError } from "types/apiError";
 import { ErrorResponses } from "types/errorResponses";
 
-export const errorHandler: ErrorRequestHandler = (err, req: Request, res: Response, next: NextFunction) => {
+export const errorHandler: ErrorRequestHandler = (err, req: Request, res: Response) => {
     if (err instanceof BodyError) {
         res.status(err.statusCode).json({
             error: {
