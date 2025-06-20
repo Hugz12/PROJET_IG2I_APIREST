@@ -28,7 +28,7 @@ router.post("/", authHandler, async (req: Request, res: Response, next: NextFunc
 
         const controlledBody: CreateThirdPartyDTO = await bodyControl(CreateThirdPartyDTO, req.body);
 
-        const newThirdParty = await serviceCreateThirdParty({ thirdPartyName: req.body.thirdPartyName, userId: user.idUtilisateur });
+        const newThirdParty = await serviceCreateThirdParty({ thirdPartyName: controlledBody.thirdPartyName, userId: user.idUtilisateur });
 
         res.status(SuccessResponses.THIRD_PARTY_CREATED.statusCode).json({
             data: {thirdParty: newThirdParty},
