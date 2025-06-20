@@ -1,9 +1,10 @@
 import express from 'express';
 
 // Routes import
-import authRoutes from './routes/auth/controller'; // Uncomment when auth routes are implemented
-import userRoutes from './routes/user/controller';
-import categoryRoutes from './routes/category/controller';
+import authRoutes from 'routes/auth/controller'; // Uncomment when auth routes are implemented
+import userRoutes from 'routes/user/controller';
+import categoryRoutes from 'routes/category/controller';
+import accountRoutes from 'routes/account/controller';
 
 // Middlewares import
 import { jsonErrorHandler } from './middlewares/JSONErrors';
@@ -25,6 +26,7 @@ try {
     app.use('/auth', authRoutes); // Uncomment when auth routes are implemented
     app.use('/user', userRoutes);
     app.use('/category', categoryRoutes);
+    app.use('/account', accountRoutes);
     app.use(notFoundHandler);
 
     app.use(errorHandler);

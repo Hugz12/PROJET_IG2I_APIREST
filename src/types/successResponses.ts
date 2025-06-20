@@ -29,4 +29,9 @@ export const SuccessResponses = {
         message: "Categories data fetched successfully",
         internalCode: "CATEGORIES_FETCHED"
     },
+    ACCOUNT_CREATED: {
+        statusCode: 201,
+        message: "Account created successfully",
+        internalCode: "ACCOUNT_CREATED"
+    },
 }

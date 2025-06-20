@@ -64,5 +64,10 @@ export const ErrorResponses = {
         internalCode: "USER_NOT_FOUND",
         message: "The user was not found.",
     },
+    ACCOUNT_CREATION_FAILED: {
+        statusCode: 500,
+        internalCode: "ACCOUNT_CREATION_FAILED",
+        message: "Failed to create the account. Please try again later.",
+    },
 
 };
