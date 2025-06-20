@@ -17,7 +17,7 @@ export class UpdateThirdPartyDTO {
     @IsString() @IsOptional() @MaxLength(100)
     thirdPartyName?: string;
 
-    constructor(thirdPartyName?: string, userId?: number) {
+    constructor(thirdPartyName?: string) {
         this.thirdPartyName = thirdPartyName;
     }
 }
