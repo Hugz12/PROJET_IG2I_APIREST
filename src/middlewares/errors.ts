@@ -1,4 +1,4 @@
-import { ErrorRequestHandler, Request, NextFunction, Response} from "express";
+import { ErrorRequestHandler, Request, NextFunction, Response } from "express";
 import { ApiError, BodyError } from "types/apiError";
 import { ErrorResponses } from "types/errorResponses";
 
@@ -19,6 +19,7 @@ export const errorHandler: ErrorRequestHandler = (err, req: Request, res: Respon
             }
         });
     } else {
+        console.error("Unexpected error:", err);
         res.status(ErrorResponses.SERVER_ERROR.statusCode).json({
             error: {
                 internalCode: ErrorResponses.SERVER_ERROR.internalCode,
