@@ -79,4 +79,10 @@ export const ErrorResponses = {
 		internalCode: "CATEGORY_NOT_FOUND",
 		message: "The specified category was not found.",
 	},
+	INVALID_PARAM: {
+		statusCode: 400,
+		internalCode: "INVALID_PARAM",
+		message: "The provided parameter is invalid.",
+	},
 };
+    

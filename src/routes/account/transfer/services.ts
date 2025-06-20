@@ -3,7 +3,7 @@ import { ApiError } from "types/apiError";
 import { ErrorResponses } from "types/errorResponses";
 import { CreateTransferDTO, TransferResponseDTO } from "routes/account/transfer/schema";
 
-export async function serviceCreateTransfer(transfer: CreateTransferDTO, userId: number): Promise<{ transfer: TransferResponseDTO }> {
+export async function serviceCreateTransfer(transfer: CreateTransferDTO, idCompteDebit: number, userId: number): Promise<{ transfer: TransferResponseDTO }> {
 	// Start MySQL connection
 	const connection = await getConnection();
 
@@ -12,7 +12,7 @@ export async function serviceCreateTransfer(transfer: CreateTransferDTO, userId:
 		const [accountCheck]: any = await connection.query(
 			`SELECT COUNT(*) as count FROM Compte 
 			 WHERE (idCompte = ? OR idCompte = ?) AND idUtilisateur = ?`,
-			[transfer.idCompteDebit, transfer.idCompteCredit, userId]
+			[idCompteDebit, transfer.idCompteCredit, userId]
 		);
 
 		if (accountCheck[0].count < 2) {
@@ -35,7 +35,7 @@ export async function serviceCreateTransfer(transfer: CreateTransferDTO, userId:
 			`INSERT INTO Virement (idCompteDebit, idCompteCredit, montant, dateVirement, idTiers, idCategorie)
              VALUES (?, ?, ?, ?, ?, ?)`,
 			[
-				transfer.idCompteDebit,
+				idCompteDebit,
 				transfer.idCompteCredit,
 				transfer.montant,
 				transfer.dateVirement || new Date(),
@@ -49,7 +49,7 @@ export async function serviceCreateTransfer(transfer: CreateTransferDTO, userId:
 		return {
 			transfer: new TransferResponseDTO(
 				idVirement,
-				transfer.idCompteDebit,
+				idCompteDebit,
 				transfer.idCompteCredit,
 				transfer.montant,
 				new Date(transfer.dateVirement || new Date()),

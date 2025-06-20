@@ -1,28 +1,22 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { bodyControl } from "lib/services/bodyControl";
 import { SuccessResponses } from "types/successResponses";
-import { CreateTransferDTO, TransferResponseDTO, FetchTransfersByAccountIdResponseDTO } from "./schema";
+import { CreateTransferDTO } from "./schema";
 import { serviceCreateTransfer, serviceFetchTransfersByAccountId } from "./services";
 import { authHandler } from "middlewares/auth";
-import { ErrorResponses } from "types/errorResponses";
+import { paramControl } from "lib/services/paramControl";
 
 const router: Router = Router({ mergeParams: true });
 
 // GET /account/:idAccount/transfer - Fetch transfers for a specific account
 router.get("/", authHandler, async (req: Request, res: Response, next: NextFunction) => {
 	try {
+		// Enhance user
 		const user = res.locals.user;
-		const idAccount = parseInt(req.params.idAccount, 10);
-
-		// Validate account ID
-		if (isNaN(idAccount)) {
-			res.status(ErrorResponses.INVALID_ACCOUNT_ID.statusCode).json({ error: "Invalid account ID" });
-			return;
-		}
-
+		// Param control
+		const idAccount = paramControl(req.params.idAccount);
 		// Service call
 		const transfers = await serviceFetchTransfersByAccountId(idAccount, user.idUtilisateur);
-
 		// Response
 		res.status(SuccessResponses.TRANSFERS_FETCHED.statusCode).json({
 			data: transfers,
@@ -35,21 +29,14 @@ router.get("/", authHandler, async (req: Request, res: Response, next: NextFunct
 // POST /account/:idAccount/transfer - Create a transfer
 router.post("/", authHandler, async (req: Request, res: Response, next: NextFunction) => {
 	try {
+		// Enhance user
 		const user = res.locals.user;
-		const idAccount = parseInt(req.params.idAccount, 10);
-
-		// Validate account ID
-		if (isNaN(idAccount)) {
-			res.status(ErrorResponses.INVALID_ACCOUNT_ID.statusCode).json({ error: "Invalid account ID" });
-			return;
-		}
-
+		// Param control
+		const idAccount = paramControl(req.params.idAccount);
 		// Body control
 		const controlledBody: CreateTransferDTO = await bodyControl(CreateTransferDTO, req.body);
-
 		// Service call
-		const result = await serviceCreateTransfer(controlledBody, user.idUtilisateur);
-
+		const result = await serviceCreateTransfer(controlledBody, idAccount, user.idUtilisateur);
 		// Response
 		res.status(SuccessResponses.TRANSFER_DONE.statusCode).json({
 			data: result.transfer,

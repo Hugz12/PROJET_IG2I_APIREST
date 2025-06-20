@@ -1,6 +1,6 @@
-import { ErrorResponses } from "types/errorResponses";
 import { Router, Request, Response, NextFunction } from "express";
 import { bodyControl } from "lib/services/bodyControl";
+import { paramControl } from "lib/services/paramControl";
 import { SuccessResponses } from "types/successResponses";
 import { CreateAccountDTO, UpdateAccountDTO } from "routes/account/schema";
 import {
@@ -22,11 +22,11 @@ router.get("/", authHandler, async (req: Request, res: Response, next: NextFunct
 		// Enhance user
 		const user = res.locals.user;
 		// Service call
-		const accounts = await serviceGetUserAccounts(user.idUtilisateur);
+		const result = await serviceGetUserAccounts(user.idUtilisateur);
 		// Send response
 		res.status(SuccessResponses.ACCOUNTS_FETCHED.statusCode).json({
 			data: {
-				accounts: accounts,
+				accounts: result.accounts,
 			},
 		});
 	} catch (error) {
@@ -57,21 +57,16 @@ router.post("/", authHandler, async (req: Request, res: Response, next: NextFunc
 // GET /account/:idAccount - Fetch user's account data
 router.get("/:idAccount", authHandler, async (req: Request, res: Response, next: NextFunction) => {
 	try {
+		// Enhance user
 		const user = res.locals.user;
-		const idAccount = parseInt(req.params.idAccount, 10);
-
-		// Validate account ID
-		if (isNaN(idAccount)) {
-			res.status(ErrorResponses.INVALID_ACCOUNT_ID.statusCode).json({ error: "Invalid account ID" });
-			return;
-		}
-
+		// Params control
+		const idAccount = paramControl(req.params.idAccount);
 		// Service call
-		const account = await serviceGetAccountById(idAccount, user.idUtilisateur);
+		const result = await serviceGetAccountById(idAccount, user.idUtilisateur);
 		// Send response
 		res.status(SuccessResponses.ACCOUNT_FETCHED.statusCode).json({
 			data: {
-				account: account,
+				account: result.account,
 			},
 		});
 	} catch (error) {
@@ -82,22 +77,19 @@ router.get("/:idAccount", authHandler, async (req: Request, res: Response, next:
 // PUT /account/:idAccount - Update an account
 router.patch("/:idAccount", authHandler, async (req: Request, res: Response, next: NextFunction) => {
 	try {
+		// Enhance user
 		const user = res.locals.user;
-		const idAccount = parseInt(req.params.idAccount, 10);
-
-		// Validate account ID
-		if (isNaN(idAccount)) {
-			res.status(ErrorResponses.INVALID_ACCOUNT_ID.statusCode).json({ error: "Invalid account ID" });
-			return;
-		}
-
+		// Params control
+		const idAccount = paramControl(req.params.idAccount);
 		// Body control
 		const controlledBody: UpdateAccountDTO = await bodyControl(UpdateAccountDTO, req.body);
 		// Service call
-		const account = await serviceUpdateAccount(idAccount, controlledBody, user.idUtilisateur);
-		// Send response
+		const result = await serviceUpdateAccount(idAccount, controlledBody, user.idUtilisateur);
+		// Response
 		res.status(SuccessResponses.ACCOUNT_UPDATED.statusCode).json({
-			account: account,
+			data: {
+				account: result.account,
+			},
 		});
 	} catch (error) {
 		next(error);
@@ -107,15 +99,10 @@ router.patch("/:idAccount", authHandler, async (req: Request, res: Response, nex
 // DELETE /account/:idAccount - Delete an account
 router.delete("/:idAccount", authHandler, async (req: Request, res: Response, next: NextFunction) => {
 	try {
+		// Enhance user
 		const user = res.locals.user;
-		const idAccount = parseInt(req.params.idAccount, 10);
-
-		// Validate account ID
-		if (isNaN(idAccount)) {
-			res.status(ErrorResponses.INVALID_ACCOUNT_ID.statusCode).json({ error: "Invalid account ID" });
-			return;
-		}
-
+		// Params control
+		const idAccount = paramControl(req.params.idAccount);
 		// Service call
 		await serviceDeleteAccount(idAccount, user.idUtilisateur);
 		// Send response

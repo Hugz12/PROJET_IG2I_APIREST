@@ -4,10 +4,6 @@ import { IsPositiveAmount } from "lib/utils/validators";
 export class CreateTransferDTO {
 	@IsNumber()
 	@IsNotEmpty()
-	idCompteDebit: number;
-
-	@IsNumber()
-	@IsNotEmpty()
 	idCompteCredit: number;
 
 	@IsNumber()
@@ -29,14 +25,12 @@ export class CreateTransferDTO {
 	idCategorie?: number;
 
 	constructor(
-		idCompteDebit: number,
 		idCompteCredit: number,
 		montant: number,
 		dateVirement?: string,
 		idTiers?: number,
 		idCategorie?: number
 	) {
-		this.idCompteDebit = idCompteDebit;
 		this.idCompteCredit = idCompteCredit;
 		this.montant = montant;
 		this.dateVirement = dateVirement;
