@@ -1,8 +1,8 @@
-import { ErrorRequestHandler, Request, Response } from "express";
+import { ErrorRequestHandler, Request, Response, NextFunction } from "express";
 import { ApiError, BodyError } from "types/apiError";
 import { ErrorResponses } from "types/errorResponses";
 
-export const errorHandler: ErrorRequestHandler = (err, req: Request, res: Response) => {
+export const errorHandler: ErrorRequestHandler = (err, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof BodyError) {
         res.status(err.statusCode).json({
             error: {
@@ -19,7 +19,6 @@ export const errorHandler: ErrorRequestHandler = (err, req: Request, res: Respon
             }
         });
     } else {
-        console.error("Unexpected error:", err);
         res.status(ErrorResponses.SERVER_ERROR.statusCode).json({
             error: {
                 internalCode: ErrorResponses.SERVER_ERROR.internalCode,
