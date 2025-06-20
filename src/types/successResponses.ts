@@ -70,12 +70,12 @@ export const SuccessResponses = {
 		internalCode: "ACCOUNT_FETCHED",
 	},
 	ACCOUNT_UPDATED: {
-		statusCode: 200,
+		statusCode: 201,
 		message: "Account updated successfully",
 		internalCode: "ACCOUNT_UPDATED",
 	},
 	ACCOUNT_DELETED: {
-		statusCode: 200,
+		statusCode: 204,
 		message: "Account deleted successfully",
 		internalCode: "ACCOUNT_DELETED",
 	},

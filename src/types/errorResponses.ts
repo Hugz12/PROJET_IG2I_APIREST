@@ -74,4 +74,9 @@ export const ErrorResponses = {
 		internalCode: "INVALID_ACCOUNT_ID",
 		message: "The account ID is invalid.",
 	},
+	CATEGORY_NOT_FOUND: {
+		statusCode: 404,
+		internalCode: "CATEGORY_NOT_FOUND",
+		message: "The specified category was not found.",
+	},
 };
