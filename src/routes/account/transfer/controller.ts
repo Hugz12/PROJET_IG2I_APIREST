@@ -24,7 +24,9 @@ router.get("/", authHandler, async (req: Request, res: Response, next: NextFunct
 		const transfers = await serviceFetchTransfersByAccountId(idAccount, user.idUtilisateur);
 
 		// Response
-		res.status(SuccessResponses.TRANSFERS_FETCHED.statusCode).json(new FetchTransfersByAccountIdResponseDTO(transfers));
+		res.status(SuccessResponses.TRANSFERS_FETCHED.statusCode).json({
+			data: transfers,
+		});
 	} catch (error) {
 		next(error);
 	}
@@ -46,11 +48,11 @@ router.post("/", authHandler, async (req: Request, res: Response, next: NextFunc
 		const controlledBody: CreateTransferDTO = await bodyControl(CreateTransferDTO, req.body);
 
 		// Service call
-		const result: TransferResponseDTO = await serviceCreateTransfer(controlledBody, user.idUtilisateur);
+		const result = await serviceCreateTransfer(controlledBody, user.idUtilisateur);
 
 		// Response
 		res.status(SuccessResponses.TRANSFER_DONE.statusCode).json({
-			transfer: result,
+			data: result.transfer,
 		});
 	} catch (error) {
 		next(error);

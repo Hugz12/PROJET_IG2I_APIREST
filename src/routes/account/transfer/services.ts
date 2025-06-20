@@ -3,7 +3,7 @@ import { ApiError } from "types/apiError";
 import { ErrorResponses } from "types/errorResponses";
 import { CreateTransferDTO, TransferResponseDTO } from "routes/account/transfer/schema";
 
-export async function serviceCreateTransfer(transfer: CreateTransferDTO, userId: number): Promise<TransferResponseDTO> {
+export async function serviceCreateTransfer(transfer: CreateTransferDTO, userId: number): Promise<{ transfer: TransferResponseDTO }> {
 	// Start MySQL connection
 	const connection = await getConnection();
 
@@ -19,8 +19,19 @@ export async function serviceCreateTransfer(transfer: CreateTransferDTO, userId:
 			throw new ApiError(ErrorResponses.UNAUTHORIZED);
 		}
 
+		// Verify if the category exists if provided
+		if (transfer.idCategorie) {
+			const [categoryCheck]: any = await connection.query(
+				`SELECT COUNT(*) as count FROM Categorie WHERE idCategorie = ?`,
+				[transfer.idCategorie]
+			);
+			if (categoryCheck[0].count === 0) {
+				throw new ApiError(ErrorResponses.CATEGORY_NOT_FOUND);
+			}
+		}
+
 		// Insert the transfer into the database
-		const result: any = await connection.query(
+		const [result]: any = await connection.query(
 			`INSERT INTO Virement (idCompteDebit, idCompteCredit, montant, dateVirement, idTiers, idCategorie)
              VALUES (?, ?, ?, ?, ?, ?)`,
 			[
@@ -35,15 +46,17 @@ export async function serviceCreateTransfer(transfer: CreateTransferDTO, userId:
 
 		const idVirement = result.insertId;
 
-		return new TransferResponseDTO(
-			idVirement,
-			transfer.idCompteDebit,
-			transfer.idCompteCredit,
-			transfer.montant,
-			new Date(transfer.dateVirement || new Date()),
-			new Date(),
-			new Date()
-		);
+		return {
+			transfer: new TransferResponseDTO(
+				idVirement,
+				transfer.idCompteDebit,
+				transfer.idCompteCredit,
+				transfer.montant,
+				new Date(transfer.dateVirement || new Date()),
+				new Date(),
+				new Date(),
+			)
+		};
 	} finally {
 		connection.release();
 	}
@@ -52,7 +65,7 @@ export async function serviceCreateTransfer(transfer: CreateTransferDTO, userId:
 export async function serviceFetchTransfersByAccountId(
 	idCompte: number,
 	userId: number
-): Promise<TransferResponseDTO[]> {
+): Promise<{ transfers: TransferResponseDTO[] }> {
 	// Start MySQL connection
 	const connection = await getConnection();
 
@@ -73,20 +86,22 @@ export async function serviceFetchTransfersByAccountId(
 			[idCompte, idCompte]
 		);
 
-		return results.map(
-			(result: any) =>
-				new TransferResponseDTO(
-					result.idVirement,
-					result.idCompteDebit,
-					result.idCompteCredit,
-					result.montant,
-					new Date(result.dateVirement),
-					new Date(result.dateHeureCreation),
-					new Date(result.dateHeureMAJ),
-					result.idTiers,
-					result.idCategorie
-				)
-		);
+		return {
+			transfers: results.map(
+				(result: any) =>
+					new TransferResponseDTO(
+						result.idVirement,
+						result.idCompteDebit,
+						result.idCompteCredit,
+						result.montant,
+						new Date(result.dateVirement),
+						new Date(result.dateHeureCreation),
+						new Date(result.dateHeureMAJ),
+						result.idTiers,
+						result.idCategorie
+					)
+			),
+		};
 	} finally {
 		connection.release();
 	}

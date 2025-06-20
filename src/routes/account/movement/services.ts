@@ -4,7 +4,7 @@ import { ApiError } from "types/apiError";
 import { ErrorResponses } from "types/errorResponses";
 import { CreateMovementDTO, MovementResponseDTO } from "./schema";
 
-export async function serviceCreateMovement(movement: CreateMovementDTO, userId: number): Promise<MovementResponseDTO> {
+export async function serviceCreateMovement(movement: CreateMovementDTO, userId: number): Promise<{ movement: MovementResponseDTO }> {
 	// Start MySQL connection
 	const connection = await getConnection();
 
@@ -35,17 +35,19 @@ export async function serviceCreateMovement(movement: CreateMovementDTO, userId:
 
 		const idMouvement = result.insertId;
 
-		return new MovementResponseDTO(
-			idMouvement,
-			movement.idCompte,
-			movement.description,
-			movement.montant,
-			new Date(movement.dateMouvement || new Date()),
-			new Date(),
-			new Date(),
-			movement.idTiers,
-			movement.idCategorie
-		);
+		return {
+			movement: new MovementResponseDTO(
+				idMouvement,
+				movement.idCompte,
+				movement.description,
+				movement.montant,
+				new Date(movement.dateMouvement || new Date()),
+				new Date(),
+				new Date(),
+				movement.idTiers,
+				movement.idCategorie
+			)
+		};
 	} finally {
 		connection.release();
 	}
@@ -55,7 +57,7 @@ export async function serviceFetchMovementsByAccountId(
 	idCompte: number,
 	userId: number,
 	idMovement?: number
-): Promise<MovementResponseDTO[] | MovementResponseDTO> {
+): Promise<{ movement: MovementResponseDTO | MovementResponseDTO[] }> {
 	// Start MySQL connection
 	const connection = await getConnection();
 
@@ -82,17 +84,19 @@ export async function serviceFetchMovementsByAccountId(
 			}
 
 			const result = results[0];
-			return new MovementResponseDTO(
-				result.idMouvement,
-				result.idCompte,
-				result.description,
-				result.montant,
-				new Date(result.dateMouvement),
-				new Date(result.dateHeureCreation),
-				new Date(result.dateHeureMAJ),
-				result.idTiers,
-				result.idCategorie
-			);
+			return {
+				movement: new MovementResponseDTO(
+					result.idMouvement,
+					result.idCompte,
+					result.description,
+					result.montant,
+					new Date(result.dateMouvement),
+					new Date(result.dateHeureCreation),
+					new Date(result.dateHeureMAJ),
+					result.idTiers,
+					result.idCategorie
+				)
+			};
 		} else {
 			// Fetch all movements for the account
 			const [results]: any = await connection.query(

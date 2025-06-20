@@ -21,10 +21,12 @@ router.get("/", authHandler, async (req: Request, res: Response, next: NextFunct
 		}
 
 		// Service call
-		const movements = (await serviceFetchMovementsByAccountId(idAccount, user.idUtilisateur)) as MovementResponseDTO[];
+		const result = (await serviceFetchMovementsByAccountId(idAccount, user.idUtilisateur));
 
 		// Response
-		res.status(SuccessResponses.MOVEMENTS_FETCHED.statusCode).json(new FetchMovementsByAccountIdResponseDTO(movements));
+		res.status(SuccessResponses.MOVEMENTS_FETCHED.statusCode).json({
+			data: { movements: result.movement }
+		});
 	} catch (error) {
 		next(error);
 	}
@@ -44,15 +46,15 @@ router.get("/:idMovement", authHandler, async (req: Request, res: Response, next
 		}
 
 		// Service call
-		const movement = (await serviceFetchMovementsByAccountId(
+		const result = await serviceFetchMovementsByAccountId(
 			idAccount,
 			user.idUtilisateur,
 			idMovement
-		)) as MovementResponseDTO;
+		)
 
 		// Response
 		res.status(SuccessResponses.MOVEMENT_FETCHED.statusCode).json({
-			movement: movement,
+			data: result.movement,
 		});
 	} catch (error) {
 		next(error);
