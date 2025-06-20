@@ -25,7 +25,9 @@ router.get("/", authHandler, async (req: Request, res: Response, next: NextFunct
 		const accounts = await serviceGetUserAccounts(user.idUtilisateur);
 		// Send response
 		res.status(SuccessResponses.ACCOUNTS_FETCHED.statusCode).json({
-			accounts: accounts,
+			data: {
+				accounts: accounts,
+			},
 		});
 	} catch (error) {
 		next(error);
@@ -43,7 +45,9 @@ router.post("/", authHandler, async (req: Request, res: Response, next: NextFunc
 		const result = await serviceCreateAccount(controlledBody, user.idUtilisateur);
 		// Send response
 		res.status(SuccessResponses.ACCOUNT_CREATED.statusCode).json({
-			account: result.account,
+			data: {
+				account: result.account,
+			},
 		});
 	} catch (error) {
 		next(error);
@@ -66,7 +70,9 @@ router.get("/:idAccount", authHandler, async (req: Request, res: Response, next:
 		const account = await serviceGetAccountById(idAccount, user.idUtilisateur);
 		// Send response
 		res.status(SuccessResponses.ACCOUNT_FETCHED.statusCode).json({
-			account: account,
+			data: {
+				account: account,
+			},
 		});
 	} catch (error) {
 		next(error);
@@ -74,7 +80,7 @@ router.get("/:idAccount", authHandler, async (req: Request, res: Response, next:
 });
 
 // PUT /account/:idAccount - Update an account
-router.put("/:idAccount", authHandler, async (req: Request, res: Response, next: NextFunction) => {
+router.patch("/:idAccount", authHandler, async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const user = res.locals.user;
 		const idAccount = parseInt(req.params.idAccount, 10);
@@ -113,9 +119,7 @@ router.delete("/:idAccount", authHandler, async (req: Request, res: Response, ne
 		// Service call
 		await serviceDeleteAccount(idAccount, user.idUtilisateur);
 		// Send response
-		res.status(SuccessResponses.ACCOUNT_DELETED.statusCode).json({
-			message: "Account deleted successfully",
-		});
+		res.sendStatus(SuccessResponses.ACCOUNT_DELETED.statusCode)
 	} catch (error) {
 		next(error);
 	}
