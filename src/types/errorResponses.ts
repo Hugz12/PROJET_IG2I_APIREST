@@ -64,7 +64,7 @@ export const ErrorResponses = {
         internalCode: "USER_NOT_FOUND",
         message: "The user was not found.",
     },
-    NO_FILEDS_TO_UPDATE: {
+    NO_FIELDS_TO_UPDATE: {
         statusCode: 400,
         internalCode: "NO_FIELDS_TO_UPDATE",
         message: "No fields provided to update.",
