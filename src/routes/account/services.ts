@@ -51,7 +51,7 @@ export async function serviceGetUserAccounts(userId: number): Promise<{accounts:
 					account.descriptionCompte,
 					account.nomBanque,
 					account.soldeInitial,
-					account.soldeActuel || account.soldeInitial,
+					account.dernierSolde,
 					account.idUtilisateur,
 					new Date(account.dateHeureCreation),
 					new Date(account.dateHeureMAJ)
@@ -83,7 +83,7 @@ export async function serviceGetAccountById(accountId: number, userId: number): 
 			account.descriptionCompte,
 			account.nomBanque,
 			account.soldeInitial,
-			account.soldeActuel || account.soldeInitial,
+			account.dernierSolde,
 			account.idUtilisateur,
 			new Date(account.dateHeureCreation),
 			new Date(account.dateHeureMAJ)

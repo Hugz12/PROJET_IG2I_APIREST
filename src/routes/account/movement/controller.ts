@@ -19,7 +19,9 @@ router.get("/", authHandler, async (req: Request, res: Response, next: NextFunct
 		const result = (await serviceFetchMovementsByAccountId(idAccount, user.idUtilisateur));
 		// Response
 		res.status(SuccessResponses.MOVEMENTS_FETCHED.statusCode).json({
-			data: { movements: result.movement }
+			data: { 
+				movements: result.movement 
+			}
 		});
 	} catch (error) {
 		next(error);
@@ -42,7 +44,9 @@ router.get("/:idMovement", authHandler, async (req: Request, res: Response, next
 		)
 		// Response
 		res.status(SuccessResponses.MOVEMENT_FETCHED.statusCode).json({
-			data: result.movement,
+			data: { 
+				movement: result.movement 
+			},
 		});
 	} catch (error) {
 		next(error);
@@ -57,15 +61,14 @@ router.post("/", authHandler, async (req: Request, res: Response, next: NextFunc
 		// Param control
 		const idAccount = paramControl(req.params.idAccount);
 		// Body control - set the account ID from URL params
-		const controlledBody: CreateMovementDTO = await bodyControl(CreateMovementDTO, {
-			...req.body,
-			idCompte: idAccount,
-		});
+		const controlledBody: CreateMovementDTO = await bodyControl(CreateMovementDTO, req.body);
 		// Service call
-		const result = await serviceCreateMovement(controlledBody, user.idUtilisateur);
+		const result = await serviceCreateMovement(controlledBody, idAccount, user.idUtilisateur);
 		// Response
 		res.status(SuccessResponses.MOVEMENT_CREATED.statusCode).json({
-			movement: result,
+			data: {
+				movement: result.movement,
+			},
 		});
 	} catch (error) {
 		next(error);
