@@ -9,19 +9,19 @@ export async function serviceCreateAccount(account: CreateAccountDTO, userId: nu
 
 	try {
 		// Insert the new account into the database
-		const result: any = await connection.query(
+		const [insertResult]: any = await connection.query(
 			"INSERT INTO Compte (descriptionCompte, nomBanque, soldeInitial, idUtilisateur) VALUES (?, ?, ?, ?)",
 			[account.descriptionCompte, account.nomBanque, account.soldeInitial, userId]
 		);
 
 		// Check if the insertion was successful
-		if (result.affectedRows === 0) {
+		if (insertResult.affectedRows === 0) {
 			throw new ApiError(ErrorResponses.ACCOUNT_CREATION_FAILED);
 		}
 
 		// Return the account's information
 		const [createdAccount]: any = await connection.query("SELECT * FROM Compte WHERE idCompte = ?", [
-			result[0].insertId,
+			insertResult.insertId,
 		]);
 
 		return {
