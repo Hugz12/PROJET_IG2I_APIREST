@@ -33,7 +33,7 @@ export async function serviceCreateAccount(account: CreateAccountDTO, userId: nu
 	}
 }
 
-export async function serviceGetUserAccounts(userId: number): Promise<{accounts: AccountResponseDTO[]}> {
+export async function serviceGetUserAccounts(userId: number): Promise<{ accounts: AccountResponseDTO[] }> {
 	// Start MySQL connection
 	const connection = await getConnection();
 
@@ -44,25 +44,27 @@ export async function serviceGetUserAccounts(userId: number): Promise<{accounts:
 			[userId]
 		);
 
-		return accounts.map(
-			(account: any) =>
-				new AccountResponseDTO(
-					account.idCompte,
-					account.descriptionCompte,
-					account.nomBanque,
-					account.soldeInitial,
-					account.dernierSolde,
-					account.idUtilisateur,
-					new Date(account.dateHeureCreation),
-					new Date(account.dateHeureMAJ)
-				)
-		);
+		return {
+			accounts: accounts.map(
+				(account: any) =>
+					new AccountResponseDTO(
+						account.idCompte,
+						account.descriptionCompte,
+						account.nomBanque,
+						account.soldeInitial,
+						account.dernierSolde,
+						account.idUtilisateur,
+						new Date(account.dateHeureCreation),
+						new Date(account.dateHeureMAJ)
+					)
+			)
+		};
 	} finally {
 		connection.release();
 	}
 }
 
-export async function serviceGetAccountById(accountId: number, userId: number): Promise<{account: AccountResponseDTO}> {
+export async function serviceGetAccountById(accountId: number, userId: number): Promise<{ account: AccountResponseDTO }> {
 	// Start MySQL connection
 	const connection = await getConnection();
 
@@ -78,16 +80,18 @@ export async function serviceGetAccountById(accountId: number, userId: number): 
 		}
 
 		const account = accounts[0];
-		return {account: new AccountResponseDTO(
-			account.idCompte,
-			account.descriptionCompte,
-			account.nomBanque,
-			account.soldeInitial,
-			account.dernierSolde,
-			account.idUtilisateur,
-			new Date(account.dateHeureCreation),
-			new Date(account.dateHeureMAJ)
-		)};
+		return {
+			account: new AccountResponseDTO(
+				account.idCompte,
+				account.descriptionCompte,
+				account.nomBanque,
+				account.soldeInitial,
+				account.dernierSolde,
+				account.idUtilisateur,
+				new Date(account.dateHeureCreation),
+				new Date(account.dateHeureMAJ)
+			)
+		};
 	} finally {
 		connection.release();
 	}
@@ -97,7 +101,7 @@ export async function serviceUpdateAccount(
 	accountId: number,
 	updateData: UpdateAccountDTO,
 	userId: number
-): Promise<{account: AccountResponseDTO}> {
+): Promise<{ account: AccountResponseDTO }> {
 	// Start MySQL connection
 	const connection = await getConnection();
 
