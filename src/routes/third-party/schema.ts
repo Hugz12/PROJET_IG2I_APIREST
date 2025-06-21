@@ -4,20 +4,16 @@ export class CreateThirdPartyDTO {
     @IsString() @IsNotEmpty() @MaxLength(100)
     thirdPartyName: string;
 
-    @IsNumber() @IsOptional()
-    userId?: number; // Optional as it defaults to 1 in the database
-
-    constructor(thirdPartyName: string, userId?: number) {
+    constructor(thirdPartyName: string, userId: number) {
         this.thirdPartyName = thirdPartyName;
-        this.userId = userId;
     }
 }
 
 export class UpdateThirdPartyDTO {
-    @IsString() @IsOptional() @MaxLength(100)
-    thirdPartyName?: string;
+    @IsString() @MaxLength(100)
+    thirdPartyName: string;
 
-    constructor(thirdPartyName?: string) {
+    constructor(thirdPartyName: string, userId: number) {
         this.thirdPartyName = thirdPartyName;
     }
 }
@@ -28,7 +24,7 @@ export class UpdateThirdPartyDTO {
 export class ThirdPartyResponseDTO {
     thirdPartyId: number;
     thirdPartyName: string;
-    createdAt: Date;
+    createdAt?: Date;
     updatedAt?: Date;
     userId: number;
 
@@ -36,7 +32,7 @@ export class ThirdPartyResponseDTO {
         this.thirdPartyId = thirdPartyId;
         this.thirdPartyName = thirdPartyName;
         this.userId = userId;
-        this.createdAt = createdAt || new Date();
+        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 }
