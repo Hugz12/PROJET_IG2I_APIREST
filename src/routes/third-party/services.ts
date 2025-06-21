@@ -47,19 +47,18 @@ export async function serviceCreateThirdParty(thirdPartyData: CreateThirdPartyDT
 
     try {
         const { thirdPartyName } = thirdPartyData;
-        const currentDate = new Date();
         
         const [result]: any = await connection.query(
-            `INSERT INTO Tiers (nomTiers, idUtilisateur, dateHeureCreation)
-             VALUES (?, ?, ?)`,
-            [thirdPartyName, userId, currentDate]
+            `INSERT INTO Tiers (nomTiers, idUtilisateur)
+             VALUES (?, ?)`,
+            [thirdPartyName, userId]
         );
 
         return new ThirdPartyResponseDTO(
             result.insertId,
             thirdPartyName,
             userId,
-            currentDate
+            new Date(), // Created at is set to current date
         );
     } finally {
         connection.release();
@@ -105,6 +104,7 @@ export async function serviceUpdateThirdParty(
             thirdPartyName,
             existingThirdParty.userId,
             existingThirdParty.createdAt,
+            new Date() // Updated at is set to current date
         );
     } finally {
         connection.release();
