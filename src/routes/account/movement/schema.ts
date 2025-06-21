@@ -29,8 +29,8 @@ export class CreateMovementDTO {
 	@IsOptional()
 	idCategorie?: number;
 
-	@IsLetterDOrC()
 	@IsOptional()
+	@IsLetterDOrC()
 	typeMouvement?: string;
 
 	constructor(
