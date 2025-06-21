@@ -4,7 +4,7 @@ import { ApiError } from "types/apiError";
 import { ErrorResponses } from "types/errorResponses";
 import { CreateMovementDTO, MovementResponseDTO } from "./schema";
 
-export async function serviceCreateMovement(movement: CreateMovementDTO, userId: number): Promise<{ movement: MovementResponseDTO }> {
+export async function serviceCreateMovement(movement: CreateMovementDTO, idCompte: number, userId: number): Promise<{ movement: MovementResponseDTO }> {
 	// Start MySQL connection
 	const connection = await getConnection();
 
@@ -12,40 +12,67 @@ export async function serviceCreateMovement(movement: CreateMovementDTO, userId:
 		// Verify that the account belongs to the user
 		const [accountCheck]: any = await connection.query(
 			`SELECT COUNT(*) as count FROM Compte WHERE idCompte = ? AND idUtilisateur = ?`,
-			[movement.idCompte, userId]
+			[idCompte, userId]
 		);
-
 		if (accountCheck[0].count === 0) {
 			throw new ApiError(ErrorResponses.UNAUTHORIZED);
 		}
 
+		// Validate if the category or third party exists if provided
+		if (movement.idCategorie) {
+			const [categoryCheck]: any = await connection.query(
+				`SELECT COUNT(*) as count FROM Categorie WHERE idCategorie = ?`,
+				[movement.idCategorie]
+			);
+			if (categoryCheck[0].count === 0) {
+				throw new ApiError(ErrorResponses.CATEGORY_NOT_FOUND);
+			}
+		}
+
 		// Insert the movement into the database
-		const result: any = await connection.query(
-			`INSERT INTO Mouvement (idCompte, description, montant, dateMouvement, idTiers, idCategorie)
+		const [insertResult]: any = await connection.query(
+			`INSERT INTO Mouvement (idCompte, montant, dateMouvement, idTiers, idCategorie, typeMouvement)
              VALUES (?, ?, ?, ?, ?, ?)`,
 			[
-				movement.idCompte,
-				movement.description,
+				idCompte,
 				movement.montant,
 				movement.dateMouvement || new Date(),
 				movement.idTiers || null,
 				movement.idCategorie || null,
+				movement.typeMouvement || "D" // Default to "D" for debit
 			]
 		);
 
-		const idMouvement = result.insertId;
+		// Check if the insertion was successful
+		if (insertResult.affectedRows === 0) {
+			throw new ApiError(ErrorResponses.MOVEMENT_CREATION_FAILED);
+		}
+
+		// Get the newly created movement's ID
+		const idMouvement = insertResult.insertId;
+
+		// Fetch the complete movement details
+		const [movementResult]: any = await connection.query(
+			`SELECT * FROM Mouvement WHERE idMouvement = ?`,
+			[idMouvement]
+		);
+
+		// Check if the movement was found
+		if (movementResult.length === 0) {
+			throw new ApiError(ErrorResponses.NOT_FOUND);
+		}
 
 		return {
 			movement: new MovementResponseDTO(
-				idMouvement,
-				movement.idCompte,
-				movement.description,
-				movement.montant,
-				new Date(movement.dateMouvement || new Date()),
-				new Date(),
-				new Date(),
-				movement.idTiers,
-				movement.idCategorie
+				movementResult[0].idMouvement,
+				movementResult[0].idCompte,
+				movementResult[0].typeMouvement,
+				movementResult[0].montant,
+				new Date(movementResult[0].dateMouvement),
+				new Date(movementResult[0].dateHeureCreation),
+				new Date(movementResult[0].dateHeureMAJ),
+				movementResult[0].idTiers || null,
+				movementResult[0].idCategorie || null
 			)
 		};
 	} finally {
@@ -74,27 +101,26 @@ export async function serviceFetchMovementsByAccountId(
 
 		if (idMovement) {
 			// Fetch specific movement
-			const [results]: any = await connection.query(`SELECT * FROM Mouvement WHERE idCompte = ? AND idMouvement = ?`, [
+			const [result]: any = await connection.query(`SELECT * FROM Mouvement WHERE idCompte = ? AND idMouvement = ?`, [
 				idCompte,
 				idMovement,
 			]);
 
-			if (results.length === 0) {
+			if (result.length === 0) {
 				throw new ApiError(ErrorResponses.NOT_FOUND);
 			}
-
-			const result = results[0];
+			
 			return {
 				movement: new MovementResponseDTO(
-					result.idMouvement,
-					result.idCompte,
-					result.description,
-					result.montant,
-					new Date(result.dateMouvement),
-					new Date(result.dateHeureCreation),
-					new Date(result.dateHeureMAJ),
-					result.idTiers,
-					result.idCategorie
+					result[0].idMouvement,
+					result[0].idCompte,
+					result[0].typeMouvement,
+					result[0].montant,
+					new Date(result[0].dateMouvement),
+					new Date(result[0].dateHeureCreation),
+					new Date(result[0].dateHeureMAJ),
+					result[0].idTiers,
+					result[0].idCategorie
 				)
 			};
 		} else {
@@ -104,12 +130,13 @@ export async function serviceFetchMovementsByAccountId(
 				[idCompte]
 			);
 
-			return results.map(
+			return {
+				movement: results.map(
 				(result: any) =>
 					new MovementResponseDTO(
 						result.idMouvement,
 						result.idCompte,
-						result.description,
+						result.typeMouvement,
 						result.montant,
 						new Date(result.dateMouvement),
 						new Date(result.dateHeureCreation),
@@ -117,7 +144,7 @@ export async function serviceFetchMovementsByAccountId(
 						result.idTiers,
 						result.idCategorie
 					)
-			);
+			)};
 		}
 	} finally {
 		connection.release();

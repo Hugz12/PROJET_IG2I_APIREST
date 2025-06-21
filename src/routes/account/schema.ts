@@ -49,7 +49,7 @@ export class AccountResponseDTO {
 	descriptionCompte: string;
 	nomBanque: string;
 	soldeInitial: number;
-	soldeActuel: number;
+	dernierSolde: number;
 	idUtilisateur: number;
 	dateHeureCreation: Date;
 	dateHeureMAJ: Date;
@@ -59,7 +59,7 @@ export class AccountResponseDTO {
 		descriptionCompte: string,
 		nomBanque: string,
 		soldeInitial: number,
-		soldeActuel: number,
+		dernierSolde: number,
 		idUtilisateur: number,
 		dateHeureCreation: Date,
 		dateHeureMAJ: Date
@@ -68,7 +68,7 @@ export class AccountResponseDTO {
 		this.descriptionCompte = descriptionCompte;
 		this.nomBanque = nomBanque;
 		this.soldeInitial = soldeInitial;
-		this.soldeActuel = soldeActuel;
+		this.dernierSolde = dernierSolde;
 		this.idUtilisateur = idUtilisateur;
 		this.dateHeureCreation = dateHeureCreation;
 		this.dateHeureMAJ = dateHeureMAJ;

@@ -40,6 +40,17 @@ export class IsValidPostalCodeConstraint implements ValidatorConstraintInterface
     }
 }
 
+@ValidatorConstraint({ name: "isLetterDOrC", async: false })
+export class IsLetterDOrCConstraint implements ValidatorConstraintInterface {
+    validate(value: any): boolean {
+        return typeof value === "string" && (value === "D" || value === "C");
+    }
+
+    defaultMessage(): string {
+        return "The value must be a single letter: 'D' or 'C'";
+    }
+}
+
 // Custom decorators
 export function IsPositiveAmount(validationOptions?: ValidationOptions) {
     return function (object: Object, propertyName: string) {
@@ -73,6 +84,18 @@ export function IsValidPostalCode(validationOptions?: ValidationOptions) {
             options: validationOptions,
             constraints: [],
             validator: IsValidPostalCodeConstraint,
+        });
+    };
+}
+
+export function IsLetterDOrC(validationOptions?: ValidationOptions) {
+    return function (object: Object, propertyName: string) {
+        registerDecorator({
+            target: object.constructor,
+            propertyName: propertyName,
+            options: validationOptions,
+            constraints: [],
+            validator: IsLetterDOrCConstraint,
         });
     };
 }
