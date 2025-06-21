@@ -9,18 +9,9 @@ import {
 	Max,
 	IsDateString,
 } from "class-validator";
+import { IsLetterDOrC } from "lib/utils/validators";
 
 export class CreateMovementDTO {
-	@IsNumber()
-	@IsNotEmpty()
-	idCompte: number;
-
-	@IsString()
-	@IsNotEmpty()
-	@MinLength(3)
-	@MaxLength(100)
-	description: string;
-
 	@IsNumber()
 	@IsNotEmpty()
 	@Max(999999.99)
@@ -38,27 +29,29 @@ export class CreateMovementDTO {
 	@IsOptional()
 	idCategorie?: number;
 
+	@IsLetterDOrC()
+	@IsOptional()
+	typeMouvement?: string;
+
 	constructor(
-		idCompte: number,
-		description: string,
 		montant: number,
 		dateMouvement?: string,
 		idTiers?: number,
-		idCategorie?: number
+		idCategorie?: number,
+		typeMouvement?: string
 	) {
-		this.idCompte = idCompte;
-		this.description = description;
 		this.montant = montant;
 		this.dateMouvement = dateMouvement;
 		this.idTiers = idTiers;
 		this.idCategorie = idCategorie;
+		this.typeMouvement = typeMouvement;
 	}
 }
 
 export class MovementResponseDTO {
 	idMouvement: number;
 	idCompte: number;
-	description: string;
+	typeMouvement: string;
 	montant: number;
 	dateMouvement: Date;
 	dateHeureCreation: Date;
@@ -69,7 +62,7 @@ export class MovementResponseDTO {
 	constructor(
 		idMouvement: number,
 		idCompte: number,
-		description: string,
+		typeMouvement: string,
 		montant: number,
 		dateMouvement: Date,
 		dateHeureCreation: Date,
@@ -79,7 +72,7 @@ export class MovementResponseDTO {
 	) {
 		this.idMouvement = idMouvement;
 		this.idCompte = idCompte;
-		this.description = description;
+		this.typeMouvement = typeMouvement;
 		this.montant = montant;
 		this.dateMouvement = dateMouvement;
 		this.dateHeureCreation = dateHeureCreation;
