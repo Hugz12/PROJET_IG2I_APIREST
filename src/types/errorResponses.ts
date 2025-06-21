@@ -84,5 +84,10 @@ export const ErrorResponses = {
 		internalCode: "INVALID_PARAM",
 		message: "The provided parameter is invalid.",
 	},
+	MOVEMENT_CREATION_FAILED: {
+		statusCode: 500,
+		internalCode: "MOVEMENT_CREATION_FAILED",
+		message: "Failed to create the movement. Please try again later.",
+	},
 };
     
