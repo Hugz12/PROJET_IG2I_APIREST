@@ -39,7 +39,7 @@ router.post("/", authHandler, async (req: Request, res: Response, next: NextFunc
 		const result = await serviceCreateTransfer(controlledBody, idAccount, user.idUtilisateur);
 		// Response
 		res.status(SuccessResponses.TRANSFER_DONE.statusCode).json({
-			data: result.transfer,
+			data: result,
 		});
 	} catch (error) {
 		next(error);

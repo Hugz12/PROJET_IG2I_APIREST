@@ -70,13 +70,16 @@ export async function serviceGetAccountById(accountId: number, userId: number): 
 
 	try {
 		// Fetch specific account
-		const [accounts]: any = await connection.query("SELECT * FROM Compte WHERE idCompte = ? AND idUtilisateur = ?", [
+		const [accounts]: any = await connection.query("SELECT * FROM Compte WHERE idCompte = ?", [
 			accountId,
 			userId,
 		]);
 
 		if (accounts.length === 0) {
 			throw new ApiError(ErrorResponses.NOT_FOUND);
+		}
+		if (accounts[0].idUtilisateur !== userId) {
+			throw new ApiError(ErrorResponses.UNAUTHORIZED);
 		}
 
 		const account = accounts[0];
@@ -108,12 +111,15 @@ export async function serviceUpdateAccount(
 	try {
 		// Check if account exists and belongs to user
 		const [existingAccount]: any = await connection.query(
-			"SELECT * FROM Compte WHERE idCompte = ? AND idUtilisateur = ?",
+			"SELECT * FROM Compte WHERE idCompte = ?",
 			[accountId, userId]
 		);
 
 		if (existingAccount.length === 0) {
 			throw new ApiError(ErrorResponses.NOT_FOUND);
+		}
+		if (existingAccount[0].idUtilisateur !== userId) {
+			throw new ApiError(ErrorResponses.UNAUTHORIZED);
 		}
 
 		// Prepare fields to update
