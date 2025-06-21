@@ -70,7 +70,7 @@ export const SuccessResponses = {
 		internalCode: "ACCOUNT_FETCHED",
 	},
 	ACCOUNT_UPDATED: {
-		statusCode: 201,
+		statusCode: 200,
 		message: "Account updated successfully",
 		internalCode: "ACCOUNT_UPDATED",
 	},

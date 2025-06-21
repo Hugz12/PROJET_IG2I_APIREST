@@ -143,32 +143,3 @@ export async function serviceUpdateAccount(
 		connection.release();
 	}
 }
-
-export async function serviceDeleteAccount(accountId: number, userId: number): Promise<void> {
-	// Start MySQL connection
-	const connection = await getConnection();
-
-	try {
-		// Check if account exists and belongs to user
-		const [existingAccount]: any = await connection.query(
-			"SELECT * FROM Compte WHERE idCompte = ? AND idUtilisateur = ?",
-			[accountId, userId]
-		);
-
-		if (existingAccount.length === 0) {
-			throw new ApiError(ErrorResponses.NOT_FOUND);
-		}
-
-		// Delete the account (CASCADE will handle related records)
-		const result: any = await connection.query("DELETE FROM Compte WHERE idCompte = ? AND idUtilisateur = ?", [
-			accountId,
-			userId,
-		]);
-
-		if (result.affectedRows === 0) {
-			throw new ApiError(ErrorResponses.NOT_FOUND);
-		}
-	} finally {
-		connection.release();
-	}
-}

@@ -8,7 +8,6 @@ import {
 	serviceGetUserAccounts,
 	serviceGetAccountById,
 	serviceUpdateAccount,
-	serviceDeleteAccount,
 } from "routes/account/services";
 import transferRoutes from "routes/account/transfer/controller";
 import movementRoutes from "routes/account/movement/controller";
@@ -91,22 +90,6 @@ router.patch("/:idAccount", authHandler, async (req: Request, res: Response, nex
 				account: result.account,
 			},
 		});
-	} catch (error) {
-		next(error);
-	}
-});
-
-// DELETE /account/:idAccount - Delete an account
-router.delete("/:idAccount", authHandler, async (req: Request, res: Response, next: NextFunction) => {
-	try {
-		// Enhance user
-		const user = res.locals.user;
-		// Params control
-		const idAccount = paramControl(req.params.idAccount);
-		// Service call
-		await serviceDeleteAccount(idAccount, user.idUtilisateur);
-		// Send response
-		res.sendStatus(SuccessResponses.ACCOUNT_DELETED.statusCode)
 	} catch (error) {
 		next(error);
 	}
