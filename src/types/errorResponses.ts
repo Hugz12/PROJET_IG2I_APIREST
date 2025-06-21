@@ -69,4 +69,29 @@ export const ErrorResponses = {
         internalCode: "NO_FIELDS_TO_UPDATE",
         message: "No fields provided to update.",
     },
+    ACCOUNT_CREATION_FAILED: {
+        statusCode: 500,
+        internalCode: "ACCOUNT_CREATION_FAILED",
+        message: "Failed to create the account. Please try again later.",
+    },
+    INVALID_ACCOUNT_ID: {
+        statusCode: 400,
+        internalCode: "INVALID_ACCOUNT_ID",
+        message: "The account ID is invalid.",
+    },
+    CATEGORY_NOT_FOUND: {
+        statusCode: 404,
+        internalCode: "CATEGORY_NOT_FOUND",
+        message: "The specified category was not found.",
+    },
+    INVALID_PARAM: {
+        statusCode: 400,
+        internalCode: "INVALID_PARAM",
+        message: "The provided parameter is invalid.",
+    },
+    MOVEMENT_CREATION_FAILED: {
+        statusCode: 500,
+        internalCode: "MOVEMENT_CREATION_FAILED",
+        message: "Failed to create the movement. Please try again later.",
+    },
 };

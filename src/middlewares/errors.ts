@@ -1,4 +1,4 @@
-import { ErrorRequestHandler, NextFunction, Request, Response} from "express";
+import { ErrorRequestHandler, Request, Response, NextFunction } from "express";
 import { ApiError, BodyError } from "types/apiError";
 import { ErrorResponses } from "types/errorResponses";
 
