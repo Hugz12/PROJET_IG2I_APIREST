@@ -102,7 +102,7 @@ export async function serviceUpdateThirdParty(
 
         return new ThirdPartyResponseDTO(
             id,
-            thirdPartyName ?? existingThirdParty.thirdPartyName,
+            thirdPartyName,
             existingThirdParty.userId,
             existingThirdParty.createdAt,
         );

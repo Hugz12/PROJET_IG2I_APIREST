@@ -24,7 +24,7 @@ export class UpdateThirdPartyDTO {
 export class ThirdPartyResponseDTO {
     thirdPartyId: number;
     thirdPartyName: string;
-    createdAt: Date;
+    createdAt?: Date;
     updatedAt?: Date;
     userId: number;
 
@@ -32,7 +32,7 @@ export class ThirdPartyResponseDTO {
         this.thirdPartyId = thirdPartyId;
         this.thirdPartyName = thirdPartyName;
         this.userId = userId;
-        this.createdAt = createdAt || new Date();
+        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 }
