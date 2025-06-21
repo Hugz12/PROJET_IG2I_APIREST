@@ -71,9 +71,9 @@ export async function serviceUpdateUser(userId: number, userData: UpdateUserDTO)
 
         if (fields.length === 0) {
             throw new ApiError({
-                internalCode: ErrorResponses.NO_FILEDS_TO_UPDATE.internalCode,
-                message: ErrorResponses.NO_FILEDS_TO_UPDATE.message,
-                statusCode: ErrorResponses.NO_FILEDS_TO_UPDATE.statusCode
+                internalCode: ErrorResponses.NO_FIELDS_TO_UPDATE.internalCode,
+                message: ErrorResponses.NO_FIELDS_TO_UPDATE.message,
+                statusCode: ErrorResponses.NO_FIELDS_TO_UPDATE.statusCode
             });
         }
 

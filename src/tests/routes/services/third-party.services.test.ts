@@ -76,7 +76,7 @@ describe('Third Party Services', () => {
 			expect(getConnection).toHaveBeenCalledTimes(1);
 			expect(mockQuery).toHaveBeenCalledWith(
 				expect.stringContaining("INSERT INTO Tiers"),
-				[thirdPartyName, userId, expect.any(Date)]
+				[thirdPartyName, userId]
 			);
 			expect(mockRelease).toHaveBeenCalledTimes(1);
 			expect(result).toBeInstanceOf(ThirdPartyResponseDTO);
