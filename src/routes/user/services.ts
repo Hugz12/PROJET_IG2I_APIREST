@@ -101,8 +101,6 @@ export async function serviceDeleteUser(userId: number): Promise<boolean> {
             "SELECT idUtilisateur FROM Utilisateur WHERE idUtilisateur = ?",
             [userId]
         );
-        console.log(existingUser);
-        console.log(existingUser.length);
 
         if (existingUser.length === 0) {
             throw new ApiError(ErrorResponses.USER_NOT_FOUND);

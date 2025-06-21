@@ -10,6 +10,7 @@ jest.mock('lib/services/mysql', () => ({
 
 jest.mock('lib/utils/crypt', () => ({
 	hashPassword: jest.fn(),
+	verifyPassword: jest.fn(),
 }));
 
 export const mockRelease = jest.fn();
