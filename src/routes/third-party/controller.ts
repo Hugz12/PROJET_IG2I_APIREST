@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { SuccessResponses } from "types/successResponses";
-import { serviceCreateThirdParty, serviceDeleteThirdParty, serviceUpdateThirdParty, serviceGetThirdPartiesByUserId } from "./services";
+import { serviceCreateThirdParty, serviceUpdateThirdParty, serviceGetThirdPartiesByUserId } from "./services";
 import { authHandler } from "middlewares/auth";
 import { CreateThirdPartyDTO, UpdateThirdPartyDTO } from "./schema";
 import { bodyControl } from "lib/services/bodyControl";
@@ -67,27 +67,6 @@ router.patch("/:id", authHandler, async (req: Request, res: Response, next: Next
         });
     } catch (error) {
         console.error("Error updating third party:", error);
-        next(error);
-    }
-});
-
-router.delete("/:id", authHandler, async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const user = res.locals.user;
-        const thirdPartyId = parseInt(req.params.id, 10);
-        if (isNaN(thirdPartyId)) {
-            res.status(ErrorResponses.INVALID_PARAMS.statusCode).json({
-                error: {
-                    internalCode: ErrorResponses.INVALID_PARAMS.internalCode,
-                    message: ErrorResponses.INVALID_PARAMS.message
-                }
-            });
-            return;
-        }
-        await serviceDeleteThirdParty(thirdPartyId, user.idUtilisateur);
-        res.status(SuccessResponses.THIRD_PARTY_DELETED.statusCode).json();
-    } catch (error) {
-        console.error("Error deleting third party:", error);
         next(error);
     }
 });

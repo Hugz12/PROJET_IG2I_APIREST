@@ -2,7 +2,6 @@ import {
 	serviceGetThirdPartyById,
 	serviceCreateThirdParty,
 	serviceUpdateThirdParty,
-	serviceDeleteThirdParty,
 	serviceGetThirdPartiesByUserId
 } from '../../../routes/third-party/services';
 import { getConnection } from 'lib/services/mysql';
@@ -156,76 +155,6 @@ describe('Third Party Services', () => {
 			mockQuery.mockResolvedValueOnce([[existingThirdParty]]);
 
 			await expect(serviceUpdateThirdParty(thirdPartyId, updateThirdPartyDTO, differentUserId))
-				.rejects
-				.toThrow(expect.objectContaining({
-					statusCode: ErrorResponses.UNAUTHORIZED.statusCode,
-					internalCode: ErrorResponses.UNAUTHORIZED.internalCode
-				}));
-		});
-	});
-
-	describe('serviceDeleteThirdParty', () => {
-		it('should delete an existing third party and return true', async () => {
-			const thirdPartyId = 1;
-			const userId = 1;
-
-			const existingThirdParty = {
-				thirdPartyId,
-				thirdPartyName: 'Third Party to Delete',
-				userId,
-				createdAt: new Date(),
-				updatedAt: new Date()
-			};
-
-			// Mock the getThirdPartyById response
-			mockQuery.mockResolvedValueOnce([[existingThirdParty]]);
-
-			// Mock the delete query response
-			mockQuery.mockResolvedValueOnce([{ affectedRows: 1 }]);
-
-			const result = await serviceDeleteThirdParty(thirdPartyId, userId);
-
-			expect(getConnection).toHaveBeenCalledTimes(2); // Once for get, once for delete
-			expect(mockQuery).toHaveBeenCalledWith(
-				expect.stringContaining("DELETE FROM Tiers"),
-				[thirdPartyId]
-			);
-			expect(mockRelease).toHaveBeenCalledTimes(2);
-			expect(result).toBe(true);
-		});
-
-		it('should throw NOT_FOUND error when trying to delete non-existent third party', async () => {
-			const nonExistentId = 999;
-			const userId = 1;
-
-			// Mock the getThirdPartyById response for non-existent third party
-			mockQuery.mockResolvedValueOnce([[]]);
-
-			await expect(serviceDeleteThirdParty(nonExistentId, userId))
-				.rejects
-				.toThrow(expect.objectContaining({
-					statusCode: ErrorResponses.NOT_FOUND.statusCode,
-					internalCode: ErrorResponses.NOT_FOUND.internalCode
-				}));
-		});
-
-		it('should throw UNAUTHORIZED error when trying to delete a third party owned by another user', async () => {
-			const thirdPartyId = 1;
-			const ownerId = 1;
-			const differentUserId = 2;
-
-			const existingThirdParty = {
-				thirdPartyId,
-				thirdPartyName: 'Third Party to Delete',
-				userId: ownerId, // Owned by user 1
-				createdAt: new Date(),
-				updatedAt: new Date()
-			};
-
-			// Mock the getThirdPartyById response
-			mockQuery.mockResolvedValueOnce([[existingThirdParty]]);
-
-			await expect(serviceDeleteThirdParty(thirdPartyId, differentUserId))
 				.rejects
 				.toThrow(expect.objectContaining({
 					statusCode: ErrorResponses.UNAUTHORIZED.statusCode,

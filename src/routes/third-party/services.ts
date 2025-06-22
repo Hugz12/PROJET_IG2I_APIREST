@@ -111,38 +111,6 @@ export async function serviceUpdateThirdParty(
     }
 }
 
-export async function serviceDeleteThirdParty(id: number, userId: number): Promise<boolean> {
-    const connection = await getConnection();
-
-    try {
-        const existingThirdParty = await serviceGetThirdPartyById(id);
-        
-         if (!existingThirdParty) {
-            throw new ApiError({
-                internalCode: ErrorResponses.NOT_FOUND.internalCode,
-                message: ErrorResponses.NOT_FOUND.message,
-                statusCode: ErrorResponses.NOT_FOUND.statusCode
-            });
-        }
-        else if (existingThirdParty.userId !== userId) {
-            throw new ApiError({
-                internalCode: ErrorResponses.UNAUTHORIZED.internalCode,
-                message: ErrorResponses.UNAUTHORIZED.message,
-                statusCode: ErrorResponses.UNAUTHORIZED.statusCode
-            });
-        }
-
-        const [result]: any = await connection.query(
-            'DELETE FROM Tiers WHERE idTiers = ?',
-            [id]
-        );
-
-        return result.affectedRows > 0;
-    } finally {
-        connection.release();
-    }
-}
-
 export async function serviceGetThirdPartiesByUserId(userId: number): Promise<ThirdPartyResponseDTO[]> {
     const connection = await getConnection();
 
