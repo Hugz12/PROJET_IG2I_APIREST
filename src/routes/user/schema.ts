@@ -21,12 +21,12 @@ export class UpdateUserDTO {
     prenomUtilisateur?: string;
 
     constructor(nomUtilisateur: string, prenomUtilisateur: string, login?: string, mdp?: string, ville?: string, codePostal?: number) {
-        this.login = login;
-        this.mdp = mdp;
-        this.ville = ville;
-        this.codePostal = codePostal;
-        this.nomUtilisateur = nomUtilisateur;
-        this.prenomUtilisateur = prenomUtilisateur;
+    	this.login = login;
+    	this.mdp = mdp;
+    	this.ville = ville;
+    	this.codePostal = codePostal;
+    	this.nomUtilisateur = nomUtilisateur;
+    	this.prenomUtilisateur = prenomUtilisateur;
     }
 }
 
@@ -41,13 +41,13 @@ export class UserResponseDTO {
     dateHeureMAJ?: Date;
 
     constructor(idUtilisateur: number, nomUtilisateur: string, prenomUtilisateur: string, login: string, ville?: string, codePostal?: string, dateHeureCreation?: Date, dateHeureMAJ?: Date) {
-        this.idUtilisateur = idUtilisateur;
-        this.nomUtilisateur = nomUtilisateur;
-        this.prenomUtilisateur = prenomUtilisateur;
-        this.login = login;
-        this.ville = ville;
-        this.codePostal = codePostal;
-        this.dateHeureCreation = dateHeureCreation || new Date();
-        this.dateHeureMAJ = dateHeureMAJ;
+    	this.idUtilisateur = idUtilisateur;
+    	this.nomUtilisateur = nomUtilisateur;
+    	this.prenomUtilisateur = prenomUtilisateur;
+    	this.login = login;
+    	this.ville = ville;
+    	this.codePostal = codePostal;
+    	this.dateHeureCreation = dateHeureCreation || new Date();
+    	this.dateHeureMAJ = dateHeureMAJ;
     }
 }

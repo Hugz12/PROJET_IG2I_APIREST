@@ -3,25 +3,24 @@ import {
 	serviceCreateThirdParty,
 	serviceUpdateThirdParty,
 	serviceGetThirdPartiesByUserId
-} from '../../../routes/third-party/services';
-import { getConnection } from 'lib/services/mysql';
-import { CreateThirdPartyDTO, ThirdPartyResponseDTO, UpdateThirdPartyDTO } from '../../../routes/third-party/schema';
-import { mockConnection, mockQuery, mockRelease } from '../../setup';
-import { ApiError } from 'types/apiError';
-import { ErrorResponses } from 'types/errorResponses';
+} from "../../../routes/third-party/services";
+import { getConnection } from "lib/services/mysql";
+import { CreateThirdPartyDTO, ThirdPartyResponseDTO, UpdateThirdPartyDTO } from "../../../routes/third-party/schema";
+import { mockConnection, mockQuery, mockRelease } from "../../setup";
+import { ErrorResponses } from "types/errorResponses";
 
-describe('Third Party Services', () => {
+describe("Third Party Services", () => {
 	beforeEach(() => {
 		(getConnection as jest.Mock).mockResolvedValue(mockConnection);
 		jest.clearAllMocks();
 	});
 
-	describe('serviceGetThirdPartyById', () => {
-		it('should return third party data when ID exists', async () => {
+	describe("serviceGetThirdPartyById", () => {
+		it("should return third party data when ID exists", async () => {
 			const thirdPartyId = 1;
 			const mockThirdParty = {
 				thirdPartyId,
-				thirdPartyName: 'AMAZON',
+				thirdPartyName: "AMAZON",
 				userId: 1,
 				createdAt: new Date(),
 				updatedAt: new Date()
@@ -43,7 +42,7 @@ describe('Third Party Services', () => {
 			expect(result?.userId).toBe(mockThirdParty.userId);
 		});
 
-		it('should return null when third party ID does not exist', async () => {
+		it("should return null when third party ID does not exist", async () => {
 			const nonExistentId = 999;
 
 			mockQuery.mockResolvedValueOnce([[]]);
@@ -60,12 +59,12 @@ describe('Third Party Services', () => {
 		});
 	});
 
-	describe('serviceCreateThirdParty', () => {
-		it('should create a new third party and return it', async () => {
+	describe("serviceCreateThirdParty", () => {
+		it("should create a new third party and return it", async () => {
 			const userId = 1;
-			const thirdPartyName = 'New Third Party';
+			const thirdPartyName = "New Third Party";
 			const insertId = 5;
-			const createThirdPartyDTO = new CreateThirdPartyDTO(thirdPartyName, userId);
+			const createThirdPartyDTO = new CreateThirdPartyDTO(thirdPartyName);
 
 			// Mock the insert query response
 			mockQuery.mockResolvedValueOnce([{ insertId }]);
@@ -86,16 +85,16 @@ describe('Third Party Services', () => {
 		});
 	});
 
-	describe('serviceUpdateThirdParty', () => {
-		it('should update an existing third party and return the updated data', async () => {
+	describe("serviceUpdateThirdParty", () => {
+		it("should update an existing third party and return the updated data", async () => {
 			const thirdPartyId = 1;
 			const userId = 1;
-			const newThirdPartyName = 'Updated Third Party';
-			const updateThirdPartyDTO = new UpdateThirdPartyDTO(newThirdPartyName, userId);
+			const newThirdPartyName = "Updated Third Party";
+			const updateThirdPartyDTO = new UpdateThirdPartyDTO(newThirdPartyName);
 
 			const existingThirdParty = {
 				thirdPartyId,
-				thirdPartyName: 'Original Third Party',
+				thirdPartyName: "Original Third Party",
 				userId,
 				createdAt: new Date(),
 				updatedAt: new Date()
@@ -121,10 +120,10 @@ describe('Third Party Services', () => {
 			expect(result?.userId).toBe(userId);
 		});
 
-		it('should throw NOT_FOUND error when trying to update non-existent third party', async () => {
+		it("should throw NOT_FOUND error when trying to update non-existent third party", async () => {
 			const nonExistentId = 999;
 			const userId = 1;
-			const updateThirdPartyDTO = new UpdateThirdPartyDTO('Updated Name', userId);
+			const updateThirdPartyDTO = new UpdateThirdPartyDTO("Updated Name");
 
 			// Mock the getThirdPartyById response for non-existent third party
 			mockQuery.mockResolvedValueOnce([[]]);
@@ -137,15 +136,15 @@ describe('Third Party Services', () => {
 				}));
 		});
 
-		it('should throw UNAUTHORIZED error when trying to update a third party owned by another user', async () => {
+		it("should throw UNAUTHORIZED error when trying to update a third party owned by another user", async () => {
 			const thirdPartyId = 1;
 			const ownerId = 1;
 			const differentUserId = 2;
-			const updateThirdPartyDTO = new UpdateThirdPartyDTO('Updated Name', differentUserId);
+			const updateThirdPartyDTO = new UpdateThirdPartyDTO("Updated Name");
 
 			const existingThirdParty = {
 				thirdPartyId,
-				thirdPartyName: 'Original Third Party',
+				thirdPartyName: "Original Third Party",
 				userId: ownerId, // Owned by user 1
 				createdAt: new Date(),
 				updatedAt: new Date()
@@ -163,20 +162,20 @@ describe('Third Party Services', () => {
 		});
 	});
 
-	describe('serviceGetThirdPartiesByUserId', () => {
-		it('should return an array of third parties for a specific user', async () => {
+	describe("serviceGetThirdPartiesByUserId", () => {
+		it("should return an array of third parties for a specific user", async () => {
 			const userId = 1;
 			const mockThirdParties = [
 				{
 					thirdPartyId: 1,
-					thirdPartyName: 'Amazon',
+					thirdPartyName: "Amazon",
 					userId,
 					createdAt: new Date(),
 					updatedAt: new Date()
 				},
 				{
 					thirdPartyId: 2,
-					thirdPartyName: 'Walmart',
+					thirdPartyName: "Walmart",
 					userId,
 					createdAt: new Date(),
 					updatedAt: new Date()
@@ -203,7 +202,7 @@ describe('Third Party Services', () => {
 			expect(result[1].thirdPartyId).toBe(mockThirdParties[1].thirdPartyId);
 		});
 
-		it('should return an empty array when no third parties exist for the user', async () => {
+		it("should return an empty array when no third parties exist for the user", async () => {
 			const userId = 1;
 
 			// Mock the query response with empty array

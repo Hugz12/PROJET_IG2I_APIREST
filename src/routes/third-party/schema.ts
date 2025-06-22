@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsString, MaxLength } from "class-validator";
 
 export class CreateThirdPartyDTO {
     @IsString() @IsNotEmpty() @MaxLength(100)
     thirdPartyName: string;
 
-    constructor(thirdPartyName: string, userId: number) {
-        this.thirdPartyName = thirdPartyName;
+    constructor(thirdPartyName: string) {
+    	this.thirdPartyName = thirdPartyName;
     }
 }
 
@@ -13,8 +13,8 @@ export class UpdateThirdPartyDTO {
     @IsString() @MaxLength(100)
     thirdPartyName: string;
 
-    constructor(thirdPartyName: string, userId: number) {
-        this.thirdPartyName = thirdPartyName;
+    constructor(thirdPartyName: string) {
+    	this.thirdPartyName = thirdPartyName;
     }
 }
 
@@ -29,10 +29,10 @@ export class ThirdPartyResponseDTO {
     userId: number;
 
     constructor(thirdPartyId: number, thirdPartyName: string, userId: number, createdAt?: Date, updatedAt?: Date) {
-        this.thirdPartyId = thirdPartyId;
-        this.thirdPartyName = thirdPartyName;
-        this.userId = userId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+    	this.thirdPartyId = thirdPartyId;
+    	this.thirdPartyName = thirdPartyName;
+    	this.userId = userId;
+    	this.createdAt = createdAt;
+    	this.updatedAt = updatedAt;
     }
 }

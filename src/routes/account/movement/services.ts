@@ -11,7 +11,7 @@ export async function serviceCreateMovement(movement: CreateMovementDTO, idCompt
 	try {
 		// Verify that the account belongs to the user
 		const [accountCheck]: any = await connection.query(
-			`SELECT COUNT(*) as count FROM Compte WHERE idCompte = ? AND idUtilisateur = ?`,
+			"SELECT COUNT(*) as count FROM Compte WHERE idCompte = ? AND idUtilisateur = ?",
 			[idCompte, userId]
 		);
 		if (accountCheck[0].count === 0) {
@@ -21,7 +21,7 @@ export async function serviceCreateMovement(movement: CreateMovementDTO, idCompt
 		// Validate if the category or third party exists if provided
 		if (movement.idCategorie) {
 			const [categoryCheck]: any = await connection.query(
-				`SELECT COUNT(*) as count FROM Categorie WHERE idCategorie = ?`,
+				"SELECT COUNT(*) as count FROM Categorie WHERE idCategorie = ?",
 				[movement.idCategorie]
 			);
 			if (categoryCheck[0].count === 0) {
@@ -53,7 +53,7 @@ export async function serviceCreateMovement(movement: CreateMovementDTO, idCompt
 
 		// Fetch the complete movement details
 		const [movementResult]: any = await connection.query(
-			`SELECT * FROM Mouvement WHERE idMouvement = ?`,
+			"SELECT * FROM Mouvement WHERE idMouvement = ?",
 			[idMouvement]
 		);
 
@@ -91,7 +91,7 @@ export async function serviceFetchMovementsByAccountId(
 	try {
 		// Verify that the account belongs to the user
 		const [accountCheck]: any = await connection.query(
-			`SELECT COUNT(*) as count FROM Compte WHERE idCompte = ? AND idUtilisateur = ?`,
+			"SELECT COUNT(*) as count FROM Compte WHERE idCompte = ? AND idUtilisateur = ?",
 			[idCompte, userId]
 		);
 
@@ -101,7 +101,7 @@ export async function serviceFetchMovementsByAccountId(
 
 		if (idMovement) {
 			// Fetch specific movement
-			const [result]: any = await connection.query(`SELECT * FROM Mouvement WHERE idCompte = ? AND idMouvement = ?`, [
+			const [result]: any = await connection.query("SELECT * FROM Mouvement WHERE idCompte = ? AND idMouvement = ?", [
 				idCompte,
 				idMovement,
 			]);
@@ -109,7 +109,7 @@ export async function serviceFetchMovementsByAccountId(
 			if (result.length === 0) {
 				throw new ApiError(ErrorResponses.NOT_FOUND);
 			}
-			
+
 			return {
 				movement: new MovementResponseDTO(
 					result[0].idMouvement,
@@ -126,25 +126,25 @@ export async function serviceFetchMovementsByAccountId(
 		} else {
 			// Fetch all movements for the account
 			const [results]: any = await connection.query(
-				`SELECT * FROM Mouvement WHERE idCompte = ? ORDER BY dateMouvement DESC`,
+				"SELECT * FROM Mouvement WHERE idCompte = ? ORDER BY dateMouvement DESC",
 				[idCompte]
 			);
 
 			return {
 				movement: results.map(
-				(result: any) =>
-					new MovementResponseDTO(
-						result.idMouvement,
-						result.idCompte,
-						result.typeMouvement,
-						result.montant,
-						new Date(result.dateMouvement),
-						new Date(result.dateHeureCreation),
-						new Date(result.dateHeureMAJ),
-						result.idTiers,
-						result.idCategorie
-					)
-			)};
+					(result: any) =>
+						new MovementResponseDTO(
+							result.idMouvement,
+							result.idCompte,
+							result.typeMouvement,
+							result.montant,
+							new Date(result.dateMouvement),
+							new Date(result.dateHeureCreation),
+							new Date(result.dateHeureMAJ),
+							result.idTiers,
+							result.idCategorie
+						)
+				)};
 		}
 	} finally {
 		connection.release();
