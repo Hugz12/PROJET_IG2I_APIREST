@@ -1,20 +1,11 @@
 import js from "@eslint/js";
 import tseslint from "@typescript-eslint/eslint-plugin";
 import tsparser from "@typescript-eslint/parser";
+import globals from "globals";
 
 export default [
     {
-        // Define files to ignore here
-        ignores: [
-            "**/node_modules/**",
-            "**/dist/**",
-            "**/build/**",
-            "**/coverage/**",
-            "**/.git/**",
-            "**/db_data/**",
-            "db-filler.js",
-            "build.mjs",
-        ]
+        ignores: ["node_modules/", "dist/", "build/", "coverage/", ".eslintrc.js", ".eslintignore", "db_data/", "db-filler.js", "build.mjs"],
     },
     js.configs.recommended,
     {
@@ -24,15 +15,8 @@ export default [
             ecmaVersion: "latest",
             sourceType: "module",
             globals: {
-                console: "readonly",
-                process: "readonly",
-                Buffer: "readonly",
-                __dirname: "readonly",
-                __filename: "readonly",
-                exports: "writable",
-                module: "writable",
-                require: "readonly",
-                global: "readonly"
+                ...globals.node,
+                ...globals.es2022
             }
         },
         plugins: {
@@ -44,7 +28,9 @@ export default [
             "no-console": ["error", {
                 "allow": ["log", "error"]
             }],
-            "indent": ["error", "tab", { "ignoredNodes": ["PropertyDefinition"] }],
+            "indent": ["error", "tab", {
+                "ignoredNodes": ["Decorator"]
+            }],
             "quotes": ["error", "double"],
             "semi": ["error", "always"],
             "no-trailing-spaces": "error",
@@ -54,18 +40,31 @@ export default [
     {
         files: ["**/*.test.ts", "**/tests/**/*.ts"],
         languageOptions: {
+            parser: tsparser,
+            ecmaVersion: "latest",
+            sourceType: "module",
             globals: {
-                jest: "readonly",
-                describe: "readonly",
-                it: "readonly",
-                expect: "readonly",
-                beforeEach: "readonly",
-                afterEach: "readonly",
-                beforeAll: "readonly",
-                afterAll: "readonly",
-                test: "readonly",
-                vi: "readonly"
+                ...globals.node,
+                ...globals.es2022,
+                ...globals.jest
             }
+        },
+        plugins: {
+            "@typescript-eslint": tseslint
+        },
+        rules: {
+            "no-unused-vars": "off",
+            "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "_" }],
+            "no-console": ["error", {
+                "allow": ["log", "error"]
+            }],
+            "indent": ["error", "tab", {
+                "ignoredNodes": ["Decorator"]
+            }],
+            "quotes": ["error", "double"],
+            "semi": ["error", "always"],
+            "no-trailing-spaces": "error",
+            "eol-last": "error"
         }
     }
 ];

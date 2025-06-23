@@ -5,7 +5,6 @@ repos:
       - id: eslint
         files: \.ts$
         types: [file]
-        args: [--fix]
         additional_dependencies:
           - eslint
           - "@typescript-eslint/parser"
