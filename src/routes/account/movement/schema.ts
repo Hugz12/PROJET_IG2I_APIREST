@@ -11,23 +11,23 @@ export class CreateMovementDTO {
 	@IsNumber()
 	@IsNotEmpty()
 	@Max(999999.99)
-	montant: number;
+		montant: number;
 
 	@IsDateString()
 	@IsOptional()
-	dateMouvement?: string;
+		dateMouvement?: string;
 
 	@IsNumber()
 	@IsOptional()
-	idTiers?: number;
+		idTiers?: number;
 
 	@IsNumber()
 	@IsOptional()
-	idCategorie?: number;
+		idCategorie?: number;
 
 	@IsOptional()
 	@IsLetterDOrC()
-	typeMouvement?: string;
+		typeMouvement?: string;
 
 	constructor(
 		montant: number,

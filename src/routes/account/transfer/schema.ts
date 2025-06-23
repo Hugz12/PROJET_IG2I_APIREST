@@ -4,25 +4,25 @@ import { IsPositiveAmount } from "lib/utils/validators";
 export class CreateTransferDTO {
 	@IsNumber()
 	@IsNotEmpty()
-	idCompteCredit: number;
+		idCompteCredit: number;
 
 	@IsNumber()
 	@IsNotEmpty()
 	@IsPositiveAmount()
 	@Max(999999.99)
-	montant: number;
+		montant: number;
 
 	@IsDateString()
 	@IsOptional()
-	dateVirement?: string;
+		dateVirement?: string;
 
 	@IsNumber()
 	@IsOptional()
-	idTiers?: number;
+		idTiers?: number;
 
 	@IsNumber()
 	@IsOptional()
-	idCategorie?: number;
+		idCategorie?: number;
 
 	constructor(
 		idCompteCredit: number,

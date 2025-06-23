@@ -1,12 +1,14 @@
 repos:
-  - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v9.29.0
+  - repo: local
     hooks:
       - id: eslint
+        name: ESLint
+        entry: npm run lint
+        language: system
         files: \.ts$
-        types: [file]
-        args: [--fix]
-        additional_dependencies:
-          - eslint
-          - "@typescript-eslint/parser"
-          - "@typescript-eslint/eslint-plugin"
+        pass_filenames: false
+      - id: test
+        name: Run Tests
+        entry: npm run test
+        language: system
+        pass_filenames: false
