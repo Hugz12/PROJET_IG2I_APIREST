@@ -76,7 +76,6 @@ src/
 
 - Node.js 20+
 - Podman ou Docker
-- MySQL 8.0+
 
 ### 1. Installation des dépendances
 
@@ -109,7 +108,9 @@ podman-compose up -d
 npm run data:generate
 ```
 
-Cette commande crée un utilisateur de test :
+Cette commande remplit la base de données avec des données de test pour faciliter le développement et les tests.
+
+Voici un compte utilisateur de test, (C'est le compte utilisé par défaut sur les tests postman) :
 
 - Login : `hugo.laloy@mail.com`
 - Mot de passe : `password123`
