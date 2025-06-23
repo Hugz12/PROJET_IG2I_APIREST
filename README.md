@@ -14,7 +14,7 @@
 
 ## 🎯 Vue d'ensemble
 
-Cette API REST est développée dans le cadre du projet d'informatique décisionnelle à l'IG2I. Elle permet de gérer une application de gestion financière personnelle avec les fonctionnalités suivantes :
+Cette API REST est développée dans le cadre d'un projet à l'IG2I. Elle permet de gérer une application de gestion financière personnelle avec les fonctionnalités suivantes :
 
 - **Gestion des utilisateurs** : inscription, connexion, profil
 - **Gestion des comptes bancaires** : création, consultation, modification
