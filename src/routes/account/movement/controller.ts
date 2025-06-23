@@ -11,7 +11,7 @@ const router: Router = Router({ mergeParams: true });
 // GET /account/:idAccount/movement - Fetch all movements for specified account
 router.get("/", authHandler, async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		// Enhance user 
+		// Enhance user
 		const user = res.locals.user;
 		// Param control
 		const idAccount = paramControl(req.params.idAccount);
@@ -19,8 +19,8 @@ router.get("/", authHandler, async (req: Request, res: Response, next: NextFunct
 		const result = (await serviceFetchMovementsByAccountId(idAccount, user.idUtilisateur));
 		// Response
 		res.status(SuccessResponses.MOVEMENTS_FETCHED.statusCode).json({
-			data: { 
-				movements: result.movement 
+			data: {
+				movements: result.movement
 			}
 		});
 	} catch (error) {
@@ -41,11 +41,11 @@ router.get("/:idMovement", authHandler, async (req: Request, res: Response, next
 			idAccount,
 			user.idUtilisateur,
 			idMovement
-		)
+		);
 		// Response
 		res.status(SuccessResponses.MOVEMENT_FETCHED.statusCode).json({
-			data: { 
-				movement: result.movement 
+			data: {
+				movement: result.movement
 			},
 		});
 	} catch (error) {

@@ -22,12 +22,12 @@ export class RegisterDTO {
 
 
     constructor(login: string, mdp: string, nomUtilisateur: string, prenomUtilisateur: string, ville: string, codePostal: number) {
-        this.login = login;
-        this.mdp = mdp;
-        this.nomUtilisateur = nomUtilisateur;
-        this.prenomUtilisateur = prenomUtilisateur;
-        this.ville = ville;
-        this.codePostal = codePostal;
+    	this.login = login;
+    	this.mdp = mdp;
+    	this.nomUtilisateur = nomUtilisateur;
+    	this.prenomUtilisateur = prenomUtilisateur;
+    	this.ville = ville;
+    	this.codePostal = codePostal;
     }
 }
 
@@ -39,8 +39,8 @@ export class LoginDTO {
     mdp: string;
 
     constructor(login: string, mdp: string) {
-        this.login = login;
-        this.mdp = mdp;
+    	this.login = login;
+    	this.mdp = mdp;
     }
 }
 
@@ -56,23 +56,23 @@ export class LoginResponseDTO {
     };
 
     constructor(
-        token: string,
-        idUtilisateur: number,
-        nomUtilisateur: string,
-        prenomUtilisateur: string,
-        login: string,
-        ville?: string,
-        codePostal?: string
+    	token: string,
+    	idUtilisateur: number,
+    	nomUtilisateur: string,
+    	prenomUtilisateur: string,
+    	login: string,
+    	ville?: string,
+    	codePostal?: string
     ) {
-        this.token = token;
-        this.user = {
-            idUtilisateur,
-            nomUtilisateur,
-            prenomUtilisateur,
-            login,
-            ville,
-            codePostal
-        };
+    	this.token = token;
+    	this.user = {
+    		idUtilisateur,
+    		nomUtilisateur,
+    		prenomUtilisateur,
+    		login,
+    		ville,
+    		codePostal
+    	};
     }
 }
 
@@ -88,23 +88,23 @@ export class RegisterResponseDTO {
     };
 
     constructor(
-        message: string,
-        idUtilisateur: number,
-        nomUtilisateur: string,
-        prenomUtilisateur: string,
-        login: string,
-        ville?: string,
-        codePostal?: string
+    	message: string,
+    	idUtilisateur: number,
+    	nomUtilisateur: string,
+    	prenomUtilisateur: string,
+    	login: string,
+    	ville?: string,
+    	codePostal?: string
     ) {
-        this.message = message;
-        this.user = {
-            idUtilisateur,
-            nomUtilisateur,
-            prenomUtilisateur,
-            login,
-            ville,
-            codePostal
-        };
+    	this.message = message;
+    	this.user = {
+    		idUtilisateur,
+    		nomUtilisateur,
+    		prenomUtilisateur,
+    		login,
+    		ville,
+    		codePostal
+    	};
     }
 }
 
@@ -112,6 +112,6 @@ export class LogoutResponseDTO {
     message: string;
 
     constructor(message: string) {
-        this.message = message;
+    	this.message = message;
     }
 }

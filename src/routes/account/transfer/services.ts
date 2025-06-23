@@ -22,7 +22,7 @@ export async function serviceCreateTransfer(transfer: CreateTransferDTO, idCompt
 		// Verify if the category exists if provided
 		if (transfer.idCategorie) {
 			const [categoryCheck]: any = await connection.query(
-				`SELECT COUNT(*) as count FROM Categorie WHERE idCategorie = ?`,
+				"SELECT COUNT(*) as count FROM Categorie WHERE idCategorie = ?",
 				[transfer.idCategorie]
 			);
 			if (categoryCheck[0].count === 0) {
@@ -72,7 +72,7 @@ export async function serviceFetchTransfersByAccountId(
 	try {
 		// Verify that the account belongs to the user
 		const [accountCheck]: any = await connection.query(
-			`SELECT COUNT(*) as count FROM Compte WHERE idCompte = ? AND idUtilisateur = ?`,
+			"SELECT COUNT(*) as count FROM Compte WHERE idCompte = ? AND idUtilisateur = ?",
 			[idCompte, userId]
 		);
 
@@ -82,7 +82,7 @@ export async function serviceFetchTransfersByAccountId(
 
 		// Fetch transfers for the given account ID
 		const [results]: any = await connection.query(
-			`SELECT * FROM Virement WHERE idCompteDebit = ? OR idCompteCredit = ?`,
+			"SELECT * FROM Virement WHERE idCompteDebit = ? OR idCompteCredit = ?",
 			[idCompte, idCompte]
 		);
 

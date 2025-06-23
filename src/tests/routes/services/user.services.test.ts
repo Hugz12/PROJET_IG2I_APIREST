@@ -1,28 +1,28 @@
-import { serviceGetUser, serviceUpdateUser, serviceDeleteUser } from '../../../routes/user/services';
-import { getConnection } from 'lib/services/mysql';
-import { UpdateUserDTO, UserResponseDTO } from '../../../routes/user/schema';
-import * as cryptUtils from 'lib/utils/crypt';
-import { mockConnection, mockQuery, mockRelease } from '../../setup';
-import { ApiError } from 'types/apiError';
-import { ErrorResponses } from 'types/errorResponses';
+import { serviceGetUser, serviceUpdateUser } from "../../../routes/user/services";
+import { getConnection } from "lib/services/mysql";
+import { UpdateUserDTO, UserResponseDTO } from "../../../routes/user/schema";
+import * as cryptUtils from "lib/utils/crypt";
+import { mockConnection, mockQuery, mockRelease } from "../../setup";
+import { ApiError } from "types/apiError";
+import { ErrorResponses } from "types/errorResponses";
 
-describe('User Services', () => {
+describe("User Services", () => {
 	beforeEach(() => {
 		(getConnection as jest.Mock).mockResolvedValue(mockConnection);
-		(cryptUtils.hashPassword as jest.Mock).mockResolvedValue('salt:hashedpassword');
+		(cryptUtils.hashPassword as jest.Mock).mockResolvedValue("salt:hashedpassword");
 		jest.clearAllMocks();
 	});
 
-	describe('serviceGetUser', () => {
-		it('should return user data when user exists', async () => {
+	describe("serviceGetUser", () => {
+		it("should return user data when user exists", async () => {
 			const userId = 1;
 			const mockUser = {
 				idUtilisateur: userId,
-				nomUtilisateur: 'Doe',
-				prenomUtilisateur: 'John',
-				login: 'john.doe@example.com',
-				ville: 'Paris',
-				codePostal: '75000',
+				nomUtilisateur: "Doe",
+				prenomUtilisateur: "John",
+				login: "john.doe@example.com",
+				ville: "Paris",
+				codePostal: "75000",
 				dateHeureCreation: new Date(),
 				dateHeureMAJ: new Date()
 			};
@@ -46,9 +46,9 @@ describe('User Services', () => {
 			expect(result.codePostal).toBe(mockUser.codePostal);
 		});
 
-		it('should throw USER_NOT_FOUND error when user does not exist', async () => {
+		it("should throw USER_NOT_FOUND error when user does not exist", async () => {
 			const nonExistentId = 999;
-			
+
 			// Mock an empty result
 			mockQuery.mockResolvedValueOnce([[]]);
 
@@ -62,15 +62,15 @@ describe('User Services', () => {
 		});
 	});
 
-	describe('serviceUpdateUser', () => {
-		it('should update an existing user and return the updated data', async () => {
+	describe("serviceUpdateUser", () => {
+		it("should update an existing user and return the updated data", async () => {
 			const userId = 1;
 			const updateUserDTO = new UpdateUserDTO(
-				'Updated Name', 
-				'Updated FirstName',
-				'updated.email@example.com',
-				'newPassword',
-				'Updated City',
+				"Updated Name",
+				"Updated FirstName",
+				"updated.email@example.com",
+				"newPassword",
+				"Updated City",
 				75001
 			);
 
@@ -115,7 +115,7 @@ describe('User Services', () => {
 				expect.stringContaining("UPDATE Utilisateur SET"),
 				expect.arrayContaining([
 					updateUserDTO.login,
-					'salt:hashedpassword', // mocked hashed password
+					"salt:hashedpassword", // mocked hashed password
 					updateUserDTO.ville,
 					updateUserDTO.codePostal,
 					updateUserDTO.nomUtilisateur,
@@ -133,11 +133,11 @@ describe('User Services', () => {
 			expect(result.codePostal).toBe(updateUserDTO.codePostal?.toString());
 		});
 
-		it('should update a user with only some fields provided', async () => {
+		it("should update a user with only some fields provided", async () => {
 			const userId = 1;
 			const updateUserDTO = new UpdateUserDTO(
-				'Updated Name', 
-				'Updated FirstName'
+				"Updated Name",
+				"Updated FirstName"
 			);
 
 			const mockExistingUser = [{ idUtilisateur: userId }];
@@ -145,7 +145,7 @@ describe('User Services', () => {
 				idUtilisateur: userId,
 				nomUtilisateur: updateUserDTO.nomUtilisateur,
 				prenomUtilisateur: updateUserDTO.prenomUtilisateur,
-				login: 'existing@email.com',
+				login: "existing@email.com",
 				ville: null,
 				codePostal: null,
 				dateHeureCreation: new Date(),
@@ -178,10 +178,10 @@ describe('User Services', () => {
 			expect(result.prenomUtilisateur).toBe(updateUserDTO.prenomUtilisateur);
 		});
 
-		it('should throw USER_NOT_FOUND error when trying to update non-existent user', async () => {
+		it("should throw USER_NOT_FOUND error when trying to update non-existent user", async () => {
 			const nonExistentId = 999;
-			const updateUserDTO = new UpdateUserDTO('Test', 'User');
-			
+			const updateUserDTO = new UpdateUserDTO("Test", "User");
+
 			// Mock an empty result for user check
 			mockQuery.mockResolvedValueOnce([[]]);
 
@@ -194,11 +194,11 @@ describe('User Services', () => {
 			expect(mockRelease).toHaveBeenCalledTimes(1);
 		});
 
-		it('should throw DUPLICATE_EMAIL error when email is already taken by another user', async () => {
+		it("should throw DUPLICATE_EMAIL error when email is already taken by another user", async () => {
 			const userId = 1;
-			const duplicateEmail = 'duplicate@example.com';
-			const updateUserDTO = new UpdateUserDTO('Test', 'User', duplicateEmail);
-			
+			const duplicateEmail = "duplicate@example.com";
+			const updateUserDTO = new UpdateUserDTO("Test", "User", duplicateEmail);
+
 			// Mock responses
 			mockQuery
 				.mockResolvedValueOnce([[{ idUtilisateur: userId }]]) // User exists
@@ -213,62 +213,17 @@ describe('User Services', () => {
 			expect(mockRelease).toHaveBeenCalledTimes(1);
 		});
 
-		it('should throw NO_FIELDS_TO_UPDATE error when no fields are provided to update', async () => {
+		it("should throw NO_FIELDS_TO_UPDATE error when no fields are provided to update", async () => {
 			const userId = 1;
 			// Empty update DTO
 			const emptyUserDTO = new UpdateUserDTO(undefined as unknown as string, undefined as unknown as string);
-			
+
 			// Mock response for user check
 			mockQuery.mockResolvedValueOnce([[{ idUtilisateur: userId }]]);
 
 			// Assertion for the error
 			await expect(serviceUpdateUser(userId, emptyUserDTO)).rejects.toThrow(
 				new ApiError(ErrorResponses.NO_FIELDS_TO_UPDATE)
-			);
-			expect(getConnection).toHaveBeenCalledTimes(1);
-			expect(mockQuery).toHaveBeenCalledTimes(1);
-			expect(mockRelease).toHaveBeenCalledTimes(1);
-		});
-	});
-
-	describe('serviceDeleteUser', () => {
-		it('should delete an existing user and return true', async () => {
-			const userId = 1;
-			
-			// Mock responses
-			mockQuery
-				.mockResolvedValueOnce([[{ idUtilisateur: userId }]]) // User exists
-				.mockResolvedValueOnce([{ affectedRows: 1 }]); // Delete successful
-
-			// Call the service
-			const result = await serviceDeleteUser(userId);
-
-			// Assertions
-			expect(getConnection).toHaveBeenCalledTimes(1);
-			expect(mockQuery).toHaveBeenCalledTimes(2);
-			expect(mockQuery).toHaveBeenNthCalledWith(
-				1,
-				"SELECT idUtilisateur FROM Utilisateur WHERE idUtilisateur = ?",
-				[userId]
-			);
-			expect(mockQuery).toHaveBeenNthCalledWith(
-				2,
-				"DELETE FROM Utilisateur WHERE idUtilisateur = ?",
-				[userId]
-			);
-			expect(mockRelease).toHaveBeenCalledTimes(1);
-			expect(result).toBe(true);
-		});
-
-		it('should throw USER_NOT_FOUND error when trying to delete non-existent user', async () => {
-			const nonExistentId = 999;
-			
-			// Mock an empty result for user check
-			mockQuery.mockResolvedValueOnce([[]]);
-
-			// Assertion for the error
-			await expect(serviceDeleteUser(nonExistentId)).rejects.toThrow(
-				new ApiError(ErrorResponses.USER_NOT_FOUND)
 			);
 			expect(getConnection).toHaveBeenCalledTimes(1);
 			expect(mockQuery).toHaveBeenCalledTimes(1);

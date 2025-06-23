@@ -8,7 +8,9 @@
     "start": "node dist/bundle.js",
     "test": "jest --verbose",
     "test:watch": "jest --watch",
-    "data:generate": "node db-filler.js"
+    "data:generate": "node db-filler.js",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix"
   },
   "keywords": [],
   "author": "",

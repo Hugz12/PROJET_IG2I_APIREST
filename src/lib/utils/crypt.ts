@@ -6,9 +6,9 @@ import { scryptSync, randomBytes, timingSafeEqual } from "crypto";
  * @returns Le mot de passe hashé avec le sel (format : salt:hash)
  */
 export function hashPassword(password: string): string {
-    const salt = randomBytes(16).toString("hex"); // Sel aléatoire
-    const hash = scryptSync(password, salt, 64).toString("hex");
-    return `${salt}:${hash}`;
+	const salt = randomBytes(16).toString("hex"); // Sel aléatoire
+	const hash = scryptSync(password, salt, 64).toString("hex");
+	return `${salt}:${hash}`;
 }
 
 /**
@@ -18,15 +18,15 @@ export function hashPassword(password: string): string {
  * @returns true si le mot de passe correspond, sinon false
  */
 export function verifyPassword(password: string, storedHash: string): boolean {
-    const [salt, hash] = storedHash.split(":");
+	const [salt, hash] = storedHash.split(":");
 
-    if (!salt || !hash) {
-        console.error("Hash format invalide");
-        throw new Error("Hash format invalide");
-    }
+	if (!salt || !hash) {
+		console.error("Hash format invalide");
+		throw new Error("Hash format invalide");
+	}
 
-    const hashBuffer = Buffer.from(hash, "hex");
-    const passwordBuffer = scryptSync(password, salt, 64);
+	const hashBuffer = Buffer.from(hash, "hex");
+	const passwordBuffer = scryptSync(password, salt, 64);
 
-    return timingSafeEqual(hashBuffer, passwordBuffer);
+	return timingSafeEqual(hashBuffer, passwordBuffer);
 }
