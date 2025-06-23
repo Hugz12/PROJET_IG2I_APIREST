@@ -70,11 +70,7 @@ export async function serviceUpdateUser(userId: number, userData: UpdateUserDTO)
 		].filter(([_, value]) => value !== undefined);
 
 		if (fields.length === 0) {
-			throw new ApiError({
-				internalCode: ErrorResponses.NO_FIELDS_TO_UPDATE.internalCode,
-				message: ErrorResponses.NO_FIELDS_TO_UPDATE.message,
-				statusCode: ErrorResponses.NO_FIELDS_TO_UPDATE.statusCode
-			});
+			throw new ApiError(ErrorResponses.NO_FIELDS_TO_UPDATE);
 		}
 
 		const setClause = fields.map(([key]) => `${key} = ?`).join(", ");
