@@ -5,18 +5,18 @@ export class CreateAccountDTO {
 	@IsNotEmpty()
 	@MinLength(3)
 	@MaxLength(100)
-	descriptionCompte: string;
+		descriptionCompte: string;
 
 	@IsString()
 	@IsNotEmpty()
 	@MinLength(3)
 	@MaxLength(50)
-	nomBanque: string;
+		nomBanque: string;
 
 	@IsNumber()
 	@IsNotEmpty()
 	@Min(0)
-	soldeInitial: number;
+		soldeInitial: number;
 
 	constructor(descriptionCompte: string, nomBanque: string, soldeInitial: number) {
 		this.descriptionCompte = descriptionCompte;
@@ -30,13 +30,13 @@ export class UpdateAccountDTO {
 	@IsOptional()
 	@MinLength(3)
 	@MaxLength(100)
-	descriptionCompte?: string;
+		descriptionCompte?: string;
 
 	@IsString()
 	@IsOptional()
 	@MinLength(3)
 	@MaxLength(50)
-	nomBanque?: string;
+		nomBanque?: string;
 
 	constructor(descriptionCompte?: string, nomBanque?: string) {
 		this.descriptionCompte = descriptionCompte;

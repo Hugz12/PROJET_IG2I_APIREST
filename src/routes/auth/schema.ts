@@ -3,22 +3,22 @@ import { IsValidPostalCode } from "lib/utils/validators";
 
 export class RegisterDTO {
     @IsEmail() @IsNotEmpty()
-    login: string;
+    	login: string;
 
     @IsString() @IsNotEmpty() @MinLength(8) @MaxLength(64)
-    mdp: string;
+    	mdp: string;
 
     @IsString() @IsNotEmpty() @MaxLength(64)
-    nomUtilisateur: string;
+    	nomUtilisateur: string;
 
     @IsString() @IsNotEmpty() @MaxLength(64)
-    prenomUtilisateur: string;
+    	prenomUtilisateur: string;
 
     @IsString() @IsNotEmpty() @MaxLength(128)
-    ville: string;
+    	ville: string;
 
     @IsNumber() @IsNotEmpty() @IsValidPostalCode()
-    codePostal: number;
+    	codePostal: number;
 
 
     constructor(login: string, mdp: string, nomUtilisateur: string, prenomUtilisateur: string, ville: string, codePostal: number) {
@@ -33,10 +33,10 @@ export class RegisterDTO {
 
 export class LoginDTO {
     @IsEmail() @IsNotEmpty()
-    login: string;
+    	login: string;
 
     @IsString() @IsNotEmpty() @MinLength(8) @MaxLength(64)
-    mdp: string;
+    	mdp: string;
 
     constructor(login: string, mdp: string) {
     	this.login = login;
@@ -45,8 +45,8 @@ export class LoginDTO {
 }
 
 export class LoginResponseDTO {
-    token: string;
-    user: {
+	token: string;
+	user: {
         idUtilisateur: number;
         nomUtilisateur: string;
         prenomUtilisateur: string;
@@ -55,7 +55,7 @@ export class LoginResponseDTO {
         codePostal?: string;
     };
 
-    constructor(
+	constructor(
     	token: string,
     	idUtilisateur: number,
     	nomUtilisateur: string,
@@ -63,7 +63,7 @@ export class LoginResponseDTO {
     	login: string,
     	ville?: string,
     	codePostal?: string
-    ) {
+	) {
     	this.token = token;
     	this.user = {
     		idUtilisateur,
@@ -73,12 +73,12 @@ export class LoginResponseDTO {
     		ville,
     		codePostal
     	};
-    }
+	}
 }
 
 export class RegisterResponseDTO {
-    message: string;
-    user: {
+	message: string;
+	user: {
         idUtilisateur: number;
         nomUtilisateur: string;
         prenomUtilisateur: string;
@@ -87,7 +87,7 @@ export class RegisterResponseDTO {
         codePostal?: string;
     };
 
-    constructor(
+	constructor(
     	message: string,
     	idUtilisateur: number,
     	nomUtilisateur: string,
@@ -95,7 +95,7 @@ export class RegisterResponseDTO {
     	login: string,
     	ville?: string,
     	codePostal?: string
-    ) {
+	) {
     	this.message = message;
     	this.user = {
     		idUtilisateur,
@@ -105,13 +105,13 @@ export class RegisterResponseDTO {
     		ville,
     		codePostal
     	};
-    }
+	}
 }
 
 export class LogoutResponseDTO {
-    message: string;
+	message: string;
 
-    constructor(message: string) {
+	constructor(message: string) {
     	this.message = message;
-    }
+	}
 }
